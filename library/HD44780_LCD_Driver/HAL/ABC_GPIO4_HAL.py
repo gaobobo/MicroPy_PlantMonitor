@@ -1,0 +1,250 @@
+from abc import ABC, abstractmethod
+from machine import Pin
+from time import sleep_us
+
+class GPIO4_HAL(ABC):
+
+    @abstractmethod
+    def _init_pin_in(self, pin:Pin):
+        """
+        **Init pin to INPUT mode**
+
+        This function used machine.Pin lib, and you could use super()._init_pin_in() to call.
+        For specific lib like pyb.Pin, you must achieve yourself.
+        :param pin: pin to initialize
+        """
+        pin.init(mode=Pin.IN)
+
+    @abstractmethod
+    def _init_pin_out(self, pin:Pin):
+        """
+        **Init pin to OUTPUT mode**
+
+        This function used machine.Pin lib, and you could use super()._init_pin_in() to call.
+        For specific lib like pyb.Pin, you must achieve yourself.
+        :param pin: pin to initialize
+        """
+        pin.init(mode=Pin.OUT)
+
+
+    @abstractmethod
+    def _write_to_pin(self, pin:Pin, is_high:bool):
+        """
+        **Set pin to high or low in OUTPUT mode**
+
+        This function used machine.Pin lib, and you could use super()._init_pin_in() to call.
+        For specific lib like pyb.Pin, you must achieve yourself.
+        :param pin: pin to set
+        :param is_high: false is LOW, true is HIGH
+        """
+        pin.on() if is_high else pin.off()
+
+    @abstractmethod
+    def _read_from_pin(self, pin:Pin) -> int:
+        """
+        **Read level from pin in INPUT mode**
+        :param pin: pin to read
+        :return: pin's value
+        """
+        return pin.value()
+
+    @abstractmethod
+    def _delay(self, cycle:int):
+        """
+        **Delay time by cycle**
+
+        The HD44780U's typical frequency is 270kHz, means about 37 microseconds per clock cycle.
+        However, the frequency maybe from 190kHZ to 350KHz. Override this function to fit your
+        actual frequency if needed.
+        :param cycle: Delay cycles
+        """
+
+        sleep_us(37 * cycle)
+
+    pins:dict[str, any] = None
+    """**Pins from RS, RW, E and DB4~DB7** {PinName: PinObject}"""
+
+
+
+    def __init__(self, RS, RW, E, DB4, DB5, DB6, DB7):
+        """
+        **Init class** Must be called using super().__init__()
+
+        :param RS: Register select pin
+        :param RW: Read or write pin
+        :param DB4: Data trans pin in 4bit and 8bit
+        :param DB5: Data trans pin in 4bit and 8bit
+        :param DB6: Data trans pin in 4bit and 8bit
+        :param DB7: Data trans pin in 4bit and 8bit
+        """
+        self.pins = {
+            'RS': RS,
+            'RW': RW,
+            'E': E,
+            'DB4': DB4,
+            'DB5': DB5,
+            'DB6': DB6,
+            'DB7': DB7
+        }
+
+
+    def write(self, RS_level:int, RW_level:int,
+              DB4_level:int, DB5_level:int, DB6_level:int, DB7_level:int, delay_cycles:int = 1):
+        """
+        **Write instructions to GPIO**
+
+        :param delay_cycles: Delay cycles
+        :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
+        :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
+        :param DB4_level: DB4 pin level. 0 is LOW, otherwise is HIGH
+        :param DB5_level: DB5 pin level. 0 is LOW, otherwise is HIGH
+        :param DB6_level: DB6 pin level. 0 is LOW, otherwise is HIGH
+        :param DB7_level: DB7 pin level. 0 is LOW, otherwise is HIGH
+        """
+        for pin in self.pins.values():
+            self._init_pin_out(pin)
+
+        self._write_to_pin(self.pins['RS'], bool(RS_level))
+        self._write_to_pin(self.pins['RW'], bool(RW_level))
+        self._write_to_pin(self.pins['E'], False)
+        self._write_to_pin(self.pins['DB4'], bool(DB4_level))
+        self._write_to_pin(self.pins['DB5'], bool(DB5_level))
+        self._write_to_pin(self.pins['DB6'], bool(DB6_level))
+        self._write_to_pin(self.pins['DB7'], bool(DB7_level))
+
+        self._delay(delay_cycles)   # wait finish command
+
+
+    def write_int(self, RS_level: int, RW_level: int, DBs_level: int, delay_cycles:int = 1):
+        """
+        **Write instructions to GPIO**
+
+        Send twice although only 4 bit. To send only once, use self.write().
+        :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
+        :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
+        :param DBs_level: A 8bit int number composed of DB pins' level,
+        from low bit DB0 to high bit DB7.
+        :param delay_cycles: Delay cycles
+        """
+        self.write(RS_level=RS_level, RW_level=RW_level,
+                   DB4_level=(DBs_level & 0x80) >> 7,
+                   DB5_level=(DBs_level & 0x40) >> 6,
+                   DB6_level=(DBs_level & 0x20) >> 5,
+                   DB7_level=(DBs_level & 0x10) >> 4,
+                   delay_cycles=delay_cycles
+                   )
+
+        self._write_to_pin(self.pins['E'], True)
+        self._delay(1)  # Min 450ns time for high level to be detected
+
+        self.write(RS_level=RS_level, RW_level=RW_level,
+                   DB4_level=(DBs_level & 0x08) >> 3,
+                   DB5_level=(DBs_level & 0x04) >> 2,
+                   DB6_level=(DBs_level & 0x02) >> 1,
+                   DB7_level=(DBs_level & 0x01) >> 0,
+                   delay_cycles=delay_cycles
+                   )
+
+
+    def write_list(self, RS_level:int, RW_level:int, DBs_level:list, delay_cycles:int = 1):
+        """
+        **Write instructions to GPIO**
+
+        Send twice although only 4 bit. To send only once, use self.write().
+        :param delay_cycles: Delay cycles
+        :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
+        :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
+        :param DBs_level: A list composed of DB pins' level, from DB0 to DB7.
+        If the length is less than 8, it will be padded with zeros.
+        """
+        pins_level = [0] * (8 - len(DBs_level))
+        pins_level.extend(DBs_level)
+
+        self.write(RS_level=RS_level, RW_level=RW_level,
+                   DB4_level=pins_level[4],
+                   DB5_level=pins_level[5],
+                   DB6_level=pins_level[6],
+                   DB7_level=pins_level[7],
+                   delay_cycles=delay_cycles)
+
+        self._write_to_pin(self.pins['E'], True)
+        self._delay(1)  # Min 450ns time for high level to be detected
+
+        self.write(RS_level=RS_level, RW_level=RW_level,
+                   DB4_level=pins_level[0],
+                   DB5_level=pins_level[1],
+                   DB6_level=pins_level[2],
+                   DB7_level=pins_level[3],
+                   delay_cycles=delay_cycles)
+
+
+    def read(self, RS_level:int, RW_level:int, delay_cycles:int = 1) -> int:
+        """
+        **Read 4bit data from DB4~DB7**
+
+        :param delay_cycles: Delay cycles
+        :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
+        :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
+        :return: A 4bit int number read. From DB4 to DB7.
+        """
+        self._init_pin_out(self.pins['RS'])
+        self._write_to_pin(self.pins['RS'], bool(RS_level))
+
+        self._init_pin_out(self.pins['RW'])
+        self._write_to_pin(self.pins['RW'], bool(RW_level))
+
+        self._init_pin_out(self.pins['E'])
+        self._write_to_pin(self.pins['E'], False)
+
+        self._init_pin_in(self.pins['DB4'])
+        self._init_pin_in(self.pins['DB5'])
+        self._init_pin_in(self.pins['DB6'])
+        self._init_pin_in(self.pins['DB7'])
+
+        self._delay(delay_cycles)  # wait finish command
+
+        data = 0
+        data += (self._read_from_pin(pin) << (i - 1) for i, (pin) in enumerate(self.pins.values()[3:]))
+
+        return data
+
+
+    def read_int(self, RS_level:int, RW_level:int) -> int:
+        """
+        **Read data from DB pins**
+
+        Read twice although only 4 pins. To read only once, use self.read().
+        :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
+        :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
+        :return: A 8bit int number read. From DB0 to DB7
+        """
+        data = 0
+        data += self.read(RS_level, RW_level) << 4
+
+        self._write_to_pin(self.pins['E'], False)
+        self._delay(1)  # Min 450ns time for high level to be detected
+
+        data += self.read(RS_level, RW_level)
+
+        return data
+
+
+    def read_list(self, RS_level:int, RW_level:int) -> list[int,]:
+        """
+        **Read data from DB pins**
+
+        Read twice although only 4 pins. To read only once, use self.read().
+        :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
+        :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
+        :return: A list composed of DB pins' level, from DB0 to DB7.
+        """
+        pins_level = []
+
+        pins_level.extend([self.read(pin, RS_level, RW_level) for pin in self.pins.values()[3:]])
+
+        self._write_to_pin(self.pins['E'], True)
+        self._delay(1)  # Min 450ns time for high level to be detected
+
+        [self.read(pin, RS_level, RW_level) for pin in self.pins.values()[3:]].extend(pins_level)
+
+        return pins_level
