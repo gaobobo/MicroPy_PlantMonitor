@@ -75,7 +75,7 @@ class GPIO4_HAL(General_HAL):
         **Init class** Must be called using super().__init__()
 
         :param RS: Register select pin
-        :param RW: Read or write pin
+        :param RW: Read or write pin. None is GND. If only write, this pin is optional and set it to None.
         :param E: Enable pin mode
         :param DB4: Data trans pin in 4bit and 8bit
         :param DB5: Data trans pin in 4bit and 8bit
@@ -93,48 +93,60 @@ class GPIO4_HAL(General_HAL):
         }
 
 
-    def write_4bit(self, RS_level:int, RW_level:int,
-                   DB4_level:int, DB5_level:int, DB6_level:int, DB7_level:int, delay_cycles:int = 1):
+    def write_4bit(self, RS_level:int,
+                   DB4_level:int, DB5_level:int, DB6_level:int, DB7_level:int, delay_cycles:int = 0,
+                   RW_level:int=None):
         """
         **Write instructions to GPIO**
 
         :param delay_cycles: Delay cycles
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
         :param DB4_level: DB4 pin level. 0 is LOW, otherwise is HIGH
         :param DB5_level: DB5 pin level. 0 is LOW, otherwise is HIGH
         :param DB6_level: DB6 pin level. 0 is LOW, otherwise is HIGH
         :param DB7_level: DB7 pin level. 0 is LOW, otherwise is HIGH
+        :param RW_level: RW pin level. Default is 0 or Write Mode.
         """
-        for pin in self.pins.values():
-            self._init_pin_out(pin)
 
+        self._init_pin_out(self.pins['RS'])
         self._write_to_pin(self.pins['RS'], bool(RS_level))
-        self._write_to_pin(self.pins['RW'], bool(RW_level))
+
+        if self.pins['RW'] is not None:
+            self._init_pin_out(self.pins['RW'])
+            self._write_to_pin(self.pins['RW'], False if RW_level is None else bool(RW_level))
+
+        self._init_pin_out(self.pins['E'])
         self._write_to_pin(self.pins['E'], False)
+
+        self._init_pin_out(self.pins['DB4'])
         self._write_to_pin(self.pins['DB4'], bool(DB4_level))
+
+        self._init_pin_out(self.pins['DB5'])
         self._write_to_pin(self.pins['DB5'], bool(DB5_level))
+
+        self._init_pin_out(self.pins['DB6'])
         self._write_to_pin(self.pins['DB6'], bool(DB6_level))
+
+        self._init_pin_out(self.pins['DB7'])
         self._write_to_pin(self.pins['DB7'], bool(DB7_level))
+
 
         self._delay(delay_cycles)   # wait finish command
 
 
-    def write(self, RS_level: int, RW_level: int, DBs_level: int, delay_cycles:int = 1):
+    def write(self, RS_level: int, DBs_level: int, delay_cycles:int = 1):
         """
         **Write instructions to GPIO**
 
         Send twice although only 4 bit. To send only once, use self.write_4bit().
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
-        :param DBs_level: A 8bit int number composed of DB pins' level,
-        from low bit DB0 to high bit DB7.
+        :param DBs_level: A 8bit int number composed of DB pins' level, from low bit DB0 to high bit DB7.
         :param delay_cycles: Delay cycles
         """
         if DBs_level > 0xFF:
             raise RuntimeError('DBs_level > 0xFF. Must be 8bit.')
 
-        self.write_4bit(RS_level=RS_level, RW_level=RW_level,
+        self.write_4bit(RS_level=RS_level,
                         DB4_level=(DBs_level & 0x80) >> 7,
                         DB5_level=(DBs_level & 0x40) >> 6,
                         DB6_level=(DBs_level & 0x20) >> 5,
@@ -145,7 +157,7 @@ class GPIO4_HAL(General_HAL):
         self._write_to_pin(self.pins['E'], True)
         self._delay(1)  # Min 450ns time for high level to be detected
 
-        self.write_4bit(RS_level=RS_level, RW_level=RW_level,
+        self.write_4bit(RS_level=RS_level,
                         DB4_level=(DBs_level & 0x08) >> 3,
                         DB5_level=(DBs_level & 0x04) >> 2,
                         DB6_level=(DBs_level & 0x02) >> 1,
@@ -153,15 +165,18 @@ class GPIO4_HAL(General_HAL):
                         delay_cycles=delay_cycles
                         )
 
-    def read_4bit(self, RS_level:int, RW_level:int, delay_cycles:int = 1) -> int:
+    def read_4bit(self, RS_level:int, delay_cycles:int = 1, RW_level:int = 1) -> int:
         """
         **Read 4bit data from DB4~DB7**
 
         :param delay_cycles: Delay cycles
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
+        :param RW_level: RW pin level. Default is 1 or Read Mode.
         :return: A 4bit int number read. From DB4 to DB7.
         """
+
+        if self.pins['RW'] is None: raise RuntimeError('RW pin is None but try to read.')
+
         self._init_pin_out(self.pins['RS'])
         self._write_to_pin(self.pins['RS'], bool(RS_level))
 
@@ -184,21 +199,20 @@ class GPIO4_HAL(General_HAL):
         return data
 
 
-    def read(self, RS_level:int, RW_level:int) -> int:
+    def read(self, RS_level:int) -> int:
         """
         **Read data from DB pins**
 
         Read twice although only 4 pins. To read only once, use self.read_4bit().
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
         :return: A 8bit int number read. From DB0 to DB7
         """
         data = 0
-        data += self.read_4bit(RS_level, RW_level) << 4
+        data += self.read_4bit(RS_level) << 4
 
         self._write_to_pin(self.pins['E'], False)
         self._delay(1)  # Min 450ns time for high level to be detected
 
-        data += self.read_4bit(RS_level, RW_level)
+        data += self.read_4bit(RS_level)
 
         return data
