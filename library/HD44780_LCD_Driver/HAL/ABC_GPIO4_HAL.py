@@ -47,6 +47,9 @@ class GPIO4_HAL(General_HAL):
     def _read_from_pin(self, pin:Pin) -> int:
         """
         **Read level from pin in INPUT mode**
+
+        This function used machine.Pin lib, and you could use super()._init_pin_in() to call.
+        For specific lib like pyb.Pin, you must achieve yourself.
         :param pin: pin to read
         :return: pin's value
         """
