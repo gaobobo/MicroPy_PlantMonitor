@@ -21,8 +21,8 @@ class WriteToCommandRegister:
 
         class cmd(WriteToCommandRegister):
             def __init__(self):
-                print(bin(
-                        self._LCD_DISPLAY_ON
+                print(bin( self._LCD_DISPLAY
+                      +  self._LCD_DISPLAY_ON
                       + self._LCD_DISPLAY_CURSOR_ON
                       + self._LCD_DISPLAY_CURSOR_BLINK))
 
