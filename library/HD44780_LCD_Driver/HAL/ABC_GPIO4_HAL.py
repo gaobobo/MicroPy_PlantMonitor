@@ -149,7 +149,7 @@ class GPIO4_HAL(ABC):
                         delay_cycles=delay_cycles
                         )
 
-    def read(self, RS_level:int, RW_level:int, delay_cycles:int = 1) -> int:
+    def read_4bit(self, RS_level:int, RW_level:int, delay_cycles:int = 1) -> int:
         """
         **Read 4bit data from DB4~DB7**
 
@@ -180,22 +180,22 @@ class GPIO4_HAL(ABC):
         return data
 
 
-    def read_int(self, RS_level:int, RW_level:int) -> int:
+    def read(self, RS_level:int, RW_level:int) -> int:
         """
         **Read data from DB pins**
 
-        Read twice although only 4 pins. To read only once, use self.read().
+        Read twice although only 4 pins. To read only once, use self.read_4bit().
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
         :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
         :return: A 8bit int number read. From DB0 to DB7
         """
         data = 0
-        data += self.read(RS_level, RW_level) << 4
+        data += self.read_4bit(RS_level, RW_level) << 4
 
         self._write_to_pin(self.pins['E'], False)
         self._delay(1)  # Min 450ns time for high level to be detected
 
-        data += self.read(RS_level, RW_level)
+        data += self.read_4bit(RS_level, RW_level)
 
         return data
 
@@ -204,18 +204,18 @@ class GPIO4_HAL(ABC):
         """
         **Read data from DB pins**
 
-        Read twice although only 4 pins. To read only once, use self.read().
+        Read twice although only 4 pins. To read only once, use self.read_4bit().
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
         :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
         :return: A list composed of DB pins' level, from DB0 to DB7.
         """
         pins_level = []
 
-        pins_level.extend([self.read(pin, RS_level, RW_level) for pin in self.pins.values()[3:]])
+        pins_level.extend([self.read_4bit(pin, RS_level, RW_level) for pin in self.pins.values()[3:]])
 
         self._write_to_pin(self.pins['E'], True)
         self._delay(1)  # Min 450ns time for high level to be detected
 
-        [self.read(pin, RS_level, RW_level) for pin in self.pins.values()[3:]].extend(pins_level)
+        [self.read_4bit(pin, RS_level, RW_level) for pin in self.pins.values()[3:]].extend(pins_level)
 
         return pins_level
