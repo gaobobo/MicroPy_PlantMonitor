@@ -1,14 +1,12 @@
 # Copyright (c) Gao Shibo. All rights reserved.
 # Licensed under The MIT License, see LICENSE in repo's root
 
-from abc import abstractmethod
 from machine import Pin
 from time import sleep_us
 from ABC_Gener_HAL import General_HAL
 
 class GPIO4_HAL(General_HAL):
 
-    @abstractmethod
     def _init_pin_in(self, pin:Pin):
         """
         **Init pin to INPUT mode**
@@ -19,7 +17,6 @@ class GPIO4_HAL(General_HAL):
         """
         pin.init(mode=Pin.IN)
 
-    @abstractmethod
     def _init_pin_out(self, pin:Pin):
         """
         **Init pin to OUTPUT mode**
@@ -30,8 +27,6 @@ class GPIO4_HAL(General_HAL):
         """
         pin.init(mode=Pin.OUT)
 
-
-    @abstractmethod
     def _write_to_pin(self, pin:Pin, is_high:bool):
         """
         **Set pin to high or low in OUTPUT mode**
@@ -43,7 +38,6 @@ class GPIO4_HAL(General_HAL):
         """
         pin.on() if is_high else pin.off()
 
-    @abstractmethod
     def _read_from_pin(self, pin:Pin) -> int:
         """
         **Read level from pin in INPUT mode**
@@ -55,7 +49,6 @@ class GPIO4_HAL(General_HAL):
         """
         return pin.value()
 
-    @abstractmethod
     def _delay(self, cycle:int):
         """
         **Delay time by cycle**
