@@ -185,7 +185,7 @@ class HD44780_instruction_set:
 
 
 
-        def __init__(self, CGRAM_ADDRESS_offset: int = 0, DDRAM_ADDRESS_offset: int = 0):
+        def __init__(self, address_offset:int):
             """
             **To offset SET_DDRAM_ADDRESS and SET_CGRAM_ADDRESS**
 
@@ -193,8 +193,8 @@ class HD44780_instruction_set:
             :param CGRAM_ADDRESS_offset: Character generator RAM start address. Default is head or 0x00.
             :param CGRAM_ADDRESS_offset: Display data RAM start address. Default is head or 0x00.
             """
-            self.SET_CGRAM_ADDRESS += CGRAM_ADDRESS_offset
-            self.SET_DDRAM_ADDRESS += DDRAM_ADDRESS_offset
+            self.SET_CGRAM_ADDRESS += address_offset
+            self.SET_DDRAM_ADDRESS += address_offset
 
 
 
