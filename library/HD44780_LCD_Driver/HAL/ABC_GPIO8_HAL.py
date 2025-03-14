@@ -6,14 +6,22 @@ class GPIO8_HAL(General_HAL):
     #TODO: complete 8pins HAL. Ref 4pins.
     # must at least below func.
 
-    def __init__(self):
+    def __init__(self, RS:int, RW:int,
+                   DB0:int, DB1:int, DB2:int, DB3:int,
+                   DB4:int, DB5:int, DB6:int, DB7:int):
         pass
 
-    def write(self):
+    def write_8bit(self, RS_level:int, RW_level:int,
+                   DB0_level:int, DB1_level:int, DB2_level:int, DB3_level:int,
+                   DB4_level:int, DB5_level:int, DB6_level:int, DB7_level:int, delay_cycles:int = 1):
         pass
 
-    def write_int(self):
+    def write(self, RS_level: int, RW_level: int, DBs_level: int, delay_cycles:int = 1):
         pass
 
-    def read(self):
+
+    def read_8bit(self, RS_level:int, RW_level:int) -> int:
+        pass
+
+    def read(self, RS_level:int, RW_level:int) -> int:
         pass
