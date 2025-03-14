@@ -149,39 +149,6 @@ class GPIO4_HAL(ABC):
                         delay_cycles=delay_cycles
                         )
 
-
-    def write_list(self, RS_level:int, RW_level:int, DBs_level:list, delay_cycles:int = 1):
-        """
-        **Write instructions to GPIO**
-
-        Send twice although only 4 bit. To send only once, use self.write_4bit().
-        :param delay_cycles: Delay cycles
-        :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
-        :param DBs_level: A list composed of DB pins' level, from DB0 to DB7.
-        If the length is less than 8, it will be padded with zeros.
-        """
-        pins_level = [0] * (8 - len(DBs_level))
-        pins_level.extend(DBs_level)
-
-        self.write_4bit(RS_level=RS_level, RW_level=RW_level,
-                        DB4_level=pins_level[4],
-                        DB5_level=pins_level[5],
-                        DB6_level=pins_level[6],
-                        DB7_level=pins_level[7],
-                        delay_cycles=delay_cycles)
-
-        self._write_to_pin(self.pins['E'], True)
-        self._delay(1)  # Min 450ns time for high level to be detected
-
-        self.write_4bit(RS_level=RS_level, RW_level=RW_level,
-                        DB4_level=pins_level[0],
-                        DB5_level=pins_level[1],
-                        DB6_level=pins_level[2],
-                        DB7_level=pins_level[3],
-                        delay_cycles=delay_cycles)
-
-
     def read(self, RS_level:int, RW_level:int, delay_cycles:int = 1) -> int:
         """
         **Read 4bit data from DB4~DB7**
