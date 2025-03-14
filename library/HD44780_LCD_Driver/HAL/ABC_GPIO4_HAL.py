@@ -131,6 +131,9 @@ class GPIO4_HAL(General_HAL):
         from low bit DB0 to high bit DB7.
         :param delay_cycles: Delay cycles
         """
+        if DBs_level > 0xFF:
+            raise RuntimeError('DBs_level > 0xFF. Must be 8bit.')
+
         self.write_4bit(RS_level=RS_level, RW_level=RW_level,
                         DB4_level=(DBs_level & 0x80) >> 7,
                         DB5_level=(DBs_level & 0x40) >> 6,
