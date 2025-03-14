@@ -1,7 +1,7 @@
 # Copyright (c) Gao Shibo. All rights reserved.
 # Licensed under The MIT License, see LICENSE in repo's root
 
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from machine import Pin
 from time import sleep_us
 from ABC_Gener_HAL import General_HAL
