@@ -1,4 +1,5 @@
-from dis import Instruction
+# Copyright (c) Gao Shibo. All rights reserved.
+# Licensed under The MIT License, see LICENSE in repo's root
 
 from HD44780_Instruct import HD44780_instruction_set as instruction_set
 from ..HAL.ABC_Gener_HAL import General_HAL
@@ -191,5 +192,5 @@ class HD44780_Driver:
     def write_data_to_ram(self, data: int):
         self.board.write(RS_level=1, DBs_level=data)
 
-    def read_data_from_ram(self):
+    def read_data_from_ram(self) -> int:
         return self.board.read(RS_level=1)
