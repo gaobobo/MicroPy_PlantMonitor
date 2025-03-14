@@ -75,6 +75,7 @@ class GPIO4_HAL(ABC):
 
         :param RS: Register select pin
         :param RW: Read or write pin
+        :param E: Enable pin mode
         :param DB4: Data trans pin in 4bit and 8bit
         :param DB5: Data trans pin in 4bit and 8bit
         :param DB6: Data trans pin in 4bit and 8bit
