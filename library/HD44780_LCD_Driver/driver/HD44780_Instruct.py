@@ -51,7 +51,7 @@ class WriteToCommandRegister:
     **Note:** Clear display needs 1.52 ms to run."""
 
 
-    LCD_CURSOR_TO_HOME = 0x02
+    LCD_TO_HOME = 0x02
     """set Address Counter to 0.
     
     **Note:** Move cursor to home needs 1.52ms"""
