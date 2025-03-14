@@ -198,24 +198,3 @@ class GPIO4_HAL(ABC):
         data += self.read_4bit(RS_level, RW_level)
 
         return data
-
-
-    def read_list(self, RS_level:int, RW_level:int) -> list[int,]:
-        """
-        **Read data from DB pins**
-
-        Read twice although only 4 pins. To read only once, use self.read_4bit().
-        :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :param RW_level: RW pin level. 0 is LOW, otherwise is HIGH
-        :return: A list composed of DB pins' level, from DB0 to DB7.
-        """
-        pins_level = []
-
-        pins_level.extend([self.read_4bit(pin, RS_level, RW_level) for pin in self.pins.values()[3:]])
-
-        self._write_to_pin(self.pins['E'], True)
-        self._delay(1)  # Min 450ns time for high level to be detected
-
-        [self.read_4bit(pin, RS_level, RW_level) for pin in self.pins.values()[3:]].extend(pins_level)
-
-        return pins_level
