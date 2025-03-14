@@ -67,9 +67,11 @@ class WriteToCommandRegister:
     LCD_ENTRY_MODE_CURSOR_MOVE_LEFT_SHIFT = 0x05
     """Move cursor from right to left when read or write and scroll content(stay the cursor's position)."""
 
-    _LCD_ENTRY_MODE_CURSOR_MOVE_LEFT = 0x04
+    _LCD_ENTRY_MODE = 0x04
+    """Control action when read or write."""
+    _LCD_ENTRY_MODE_CURSOR_MOVE_LEFT = 0x00
     """Move cursor(type char) from left to right when read or write."""
-    _LCD_ENTRY_MODE_CURSOR_MOVE_RIGHT = 0x06
+    _LCD_ENTRY_MODE_CURSOR_MOVE_RIGHT = 0x02
     """Move cursor(type char) from right to left when read or write."""
     _LCD_ENTRY_MODE_SHIFT = 0x01
     """Enable scroll content(stay the cursor's position)"""
@@ -96,9 +98,11 @@ class WriteToCommandRegister:
     # LCD_DISPLAY_OFF_CURSOR_OFF_BLINK = 0x09
     """Turn display off. "_CURSOR_OFF" and "_BLINK" are unmeaning, just default bit operate."""
 
-    _LCD_DISPLAY_ON = 0x0C
+    _LCD_DISPLAY = 0x08
+    """Control display on or off and cursor display."""
+    _LCD_DISPLAY_ON = 0x04
     """Turn display on."""
-    _LCD_DISPLAY_OFF = 0x08
+    _LCD_DISPLAY_OFF = 0x00
     """Turn display off. """
     _LCD_DISPLAY_CURSOR_ON = 0x02
     """ Show cursor."""
@@ -118,9 +122,11 @@ class WriteToCommandRegister:
     LCD_SHIFT_DISPLAY_MOVE_LEFT = 0x18
     """Move cursor and content left but keep Display Data RAM."""
 
-    _LCD_SHIFT_CURSOR_ = 0x10
+    _LCD_SHIFT = 0x10
+    """Transform content or cursor but not change RAM."""
+    _LCD_SHIFT_CURSOR = 0x00
     """Move cursor but keep Display Data RAM."""
-    _LCD_SHIFT_DISPLAY_ = 0x18
+    _LCD_SHIFT_DISPLAY = 0x08
     """Move content but keep Display Data RAM."""
     _LCD_SHIFT_MOVE_LEFT = 0x04
     """Move left."""
@@ -149,9 +155,11 @@ class WriteToCommandRegister:
     # LCD_FUNCTION_8bitc_5x10dot = 0x3C
     """Set 8bit interface(D0 ~ D7), 2 lines unsupported 5x10 dots and will ignore "_2line"."""
 
-    _LCD_FUNCTION_4bit = 0x20
+    _LCD_FUNCTION = 0x20
+    """Init display mode."""
+    _LCD_FUNCTION_4bit = 0x00
     """4bit interface(D4, D5, D6, D7)"""
-    _LCD_FUNCTION_8bit = 0x48
+    _LCD_FUNCTION_8bit = 0x10
     """8bit interface(D0, D1, D2, D3, D4, D5, D6, D7)"""
     _LCD_FUNCTION_1line = 0x00
     """1 line display."""
