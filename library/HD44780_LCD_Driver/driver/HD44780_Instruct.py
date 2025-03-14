@@ -13,7 +13,7 @@ For more info see "`Hitachi HD44780 LCD controller <https://en.wikipedia.org/wik
 
 
 
-class WriteToCommandRegister:
+class WriteToCmdReg:
     """
     **Write to IR or Instrction Register**
 
@@ -30,7 +30,7 @@ class WriteToCommandRegister:
 
         >>> cmd()
         0b1111
-        >>> print(bin(WriteToCommandRegister().LCD_DISPLAY_ON_CURSOR_ON_BLINK))
+        >>> print(bin(WriteToCmdReg().LCD_DISPLAY_ON_CURSOR_ON_BLINK))
         0b1111
     """
 
@@ -199,7 +199,7 @@ class WriteToCommandRegister:
 
 
 
-class ReadFromCommandRegister:
+class ReadFromCmdReg:
     """
     **Get busy-flag and address counter**
 
@@ -245,7 +245,7 @@ class ReadFromCommandRegister:
 
 
 
-class WriteToDataRegister:
+class WriteToDataReg:
     """
     ** Write to CGRAM or DDRAM. **  Write to witch register is depend on witch Register Address last
     set in WriteToCommandRegister.
@@ -268,7 +268,7 @@ class WriteToDataRegister:
 
 
 
-class ReadFromDataRegister:
+class ReadFromDataReg:
     """
     **Read data from CGRAM or DDRAM.** Read witch register is depend on witch Register Address last
     set in WriteToCommandRegister.
