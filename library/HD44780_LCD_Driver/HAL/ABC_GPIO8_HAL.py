@@ -1,7 +1,8 @@
 from abc import abstractmethod, ABC
+from ABC_Gener_HAL import General_HAL
 
 
-class GPIO4_HAL(ABC):
+class GPIO4_HAL(General_HAL):
     #TODO: complete 8pins HAL. Ref 4pins.
     # must at least below func.
 

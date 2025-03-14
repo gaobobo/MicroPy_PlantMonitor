@@ -4,8 +4,9 @@
 from abc import ABC, abstractmethod
 from machine import Pin
 from time import sleep_us
+from ABC_Gener_HAL import General_HAL
 
-class GPIO4_HAL(ABC):
+class GPIO4_HAL(General_HAL):
 
     @abstractmethod
     def _init_pin_in(self, pin:Pin):
