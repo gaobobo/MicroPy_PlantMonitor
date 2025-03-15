@@ -1,6 +1,7 @@
 # Copyright (c) Gao Shibo. All rights reserved.
 # Licensed under The MIT License, see LICENSE in repo's root
 
+import time
 from machine import Pin
 from time import sleep_us
 from .ABC_Gener_HAL import General_HAL
@@ -124,9 +125,9 @@ class GPIO4_HAL(General_HAL):
         self._init_pin_out(self.pins['DB7'])
         self._write_to_pin(self.pins['DB7'], bool(DB7_level))
 
-        self._delay(1)  # Min 450ns time for high level to be detected
+        time.sleep_us(1)    # need 25ns to rise or down
         self._write_to_pin(self.pins['E'], True)
-        self._delay(1)
+        time.sleep_us(1)    # Min 450ns time for high level to be detected
         self._write_to_pin(self.pins['E'], False)
 
         self._delay(delay_cycles)   # wait finish command
@@ -186,9 +187,9 @@ class GPIO4_HAL(General_HAL):
         self._init_pin_in(self.pins['DB6'])
         self._init_pin_in(self.pins['DB7'])
 
-        self._delay(1)  # Min 450ns time for high level of E pin to be detected
+        sleep_us(1)  # need 25ns to rise or down
         self._write_to_pin(self.pins['E'], True)
-        self._delay(1)
+        sleep_us(1)  # Min 450ns time for high level of E pin to be detected
         self._write_to_pin(self.pins['E'], False)
 
         self._delay(delay_cycles)  # wait finish command
