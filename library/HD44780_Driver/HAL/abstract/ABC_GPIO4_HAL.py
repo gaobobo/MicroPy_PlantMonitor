@@ -151,7 +151,7 @@ class GPIO4_HAL(General_HAL):
                         DB5_level=DBs_level & 0x40,
                         DB6_level=DBs_level & 0x20,
                         DB7_level=DBs_level & 0x10,
-                        delay_cycles=delay_cycles
+                        delay_cycles=1
                         )
 
         self.write_4bit(RS_level=RS_level,
