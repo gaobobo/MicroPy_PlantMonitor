@@ -88,6 +88,46 @@ class GPIO4_HAL(General_HAL):
             'DB7': DB7
         }
 
+    def init_manually(self) -> None:
+        """
+        **Initialization by instructions in 4pins**
+
+        Inner reset circuit will work if the power conditions correctly,
+        but if not that must reset manually by instructions.
+        """
+        sleep_ms(40)  # wait more than 40ms after Vcc to 2.7V
+
+        self.write_4bit(RS_level=0,
+                         DB7_level=0,
+                         DB6_level=0,
+                         DB5_level=1,
+                         DB4_level=1,
+                         delay_cycles=0)
+
+        sleep_ms(5)  # wait more than 4.1ms
+
+        self.write_4bit(RS_level=0,
+                         DB7_level=0,
+                         DB6_level=0,
+                         DB5_level=1,
+                         DB4_level=1,
+                         delay_cycles=0)
+
+        sleep_us(100)  # wait more than 100μs
+
+        self.write_4bit(RS_level=0,
+                         DB7_level=0,
+                         DB6_level=0,
+                         DB5_level=1,
+                         DB4_level=1,
+                         delay_cycles=1)
+
+        self.write_4bit(RS_level=0,
+                         DB7_level=0,
+                         DB6_level=0,
+                         DB5_level=1,
+                         DB4_level=0,
+                         delay_cycles=1)
 
     def write_4bit(self, RS_level:int, DB7_level:int, DB6_level:int, DB5_level:int, DB4_level:int,
                    delay_cycles:int = 0):
