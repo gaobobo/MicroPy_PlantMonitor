@@ -202,7 +202,7 @@ class HD44780_Driver:
 
     def set_dd_ram(self, address: int) -> None:
         """
-        **To offset SET_DDRAM_ADDRESS and SET_CGRAM_ADDRESS**
+        **To set address counter SET_DDRAM_ADDRESS or SET_CGRAM_ADDRESS**
         :param address: address to set.
         """
         instruction = instruction_set.WriteToCmdReg(address).SET_DDRAM_ADDRESS
