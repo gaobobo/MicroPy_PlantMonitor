@@ -48,6 +48,14 @@ class HD44780_Driver:
                          DB4_level=1,
                          delay_cycles=1)
 
+        board.write_4bit(RS_level=0,
+                         RW_level=0,
+                         DB7_level=0,
+                         DB6_level=0,
+                         DB5_level=1,
+                         DB4_level=0,
+                         delay_cycles=1)
+
 
     @staticmethod
     def init_manually_8pin(board: GPIO8_HAL) -> None:
