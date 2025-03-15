@@ -3,9 +3,6 @@
 
 from .instruction.instruction_const import *
 from .HAL.abstract.ABC_Gener_HAL import General_HAL
-from .HAL.abstract.ABC_GPIO4_HAL import GPIO4_HAL
-from .HAL.abstract.ABC_GPIO8_HAL import GPIO8_HAL
-from time import sleep_us, sleep_ms
 
 class HD44780_Driver:
 
