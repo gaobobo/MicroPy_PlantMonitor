@@ -21,6 +21,6 @@ class pyb_GPIO4_HAL(GPIO4_HAL):
     def _delay(self, cycle: int):
         super()._delay(cycle)
 
-    def __init__(self, RS:Pin, RW:Pin,
+    def __init__(self, RS:Pin, RW:Pin|None,
                  E:Pin, DB4:Pin, DB5:Pin, DB6:Pin, DB7:Pin):
         super().__init__(RS, RW, E, DB4, DB5, DB6, DB7)
