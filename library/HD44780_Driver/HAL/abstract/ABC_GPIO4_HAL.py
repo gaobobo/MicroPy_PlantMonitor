@@ -126,6 +126,10 @@ class GPIO4_HAL(General_HAL):
         self._init_pin_out(self.pins['DB7'])
         self._write_to_pin(self.pins['DB7'], bool(DB7_level))
 
+        self._delay(1)  # Min 450ns time for high level to be detected
+        self._write_to_pin(self.pins['E'], True)
+        self._delay(1)
+        self._write_to_pin(self.pins['E'], False)
 
         self._delay(delay_cycles)   # wait finish command
 
@@ -149,9 +153,6 @@ class GPIO4_HAL(General_HAL):
                         DB7_level=DBs_level & 0x10,
                         delay_cycles=delay_cycles
                         )
-
-        self._write_to_pin(self.pins['E'], True)
-        self._delay(1)  # Min 450ns time for high level to be detected
 
         self.write_4bit(RS_level=RS_level,
                         DB4_level=DBs_level & 0x08,
@@ -187,6 +188,11 @@ class GPIO4_HAL(General_HAL):
         self._init_pin_in(self.pins['DB6'])
         self._init_pin_in(self.pins['DB7'])
 
+        self._delay(1)  # Min 450ns time for high level of E pin to be detected
+        self._write_to_pin(self.pins['E'], True)
+        self._delay(1)
+        self._write_to_pin(self.pins['E'], False)
+
         self._delay(delay_cycles)  # wait finish command
 
         data = 0
@@ -205,9 +211,6 @@ class GPIO4_HAL(General_HAL):
         """
         data = 0
         data += self.read_4bit(RS_level) << 4
-
-        self._write_to_pin(self.pins['E'], False)
-        self._delay(1)  # Min 450ns time for high level to be detected
 
         data += self.read_4bit(RS_level)
 
