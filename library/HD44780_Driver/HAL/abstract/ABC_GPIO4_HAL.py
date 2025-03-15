@@ -90,17 +90,17 @@ class GPIO4_HAL(General_HAL):
 
 
     def write_4bit(self, RS_level:int,
-                   DB4_level:int, DB5_level:int, DB6_level:int, DB7_level:int, delay_cycles:int = 0,
+                   DB7_level:int, DB6_level:int, DB5_level:int, DB4_level:int, delay_cycles:int = 0,
                    RW_level:int=None):
         """
         **Write instructions to GPIO**
 
         :param delay_cycles: Delay cycles
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :param DB4_level: DB4 pin level. 0 is LOW, otherwise is HIGH
-        :param DB5_level: DB5 pin level. 0 is LOW, otherwise is HIGH
-        :param DB6_level: DB6 pin level. 0 is LOW, otherwise is HIGH
         :param DB7_level: DB7 pin level. 0 is LOW, otherwise is HIGH
+        :param DB6_level: DB6 pin level. 0 is LOW, otherwise is HIGH
+        :param DB5_level: DB5 pin level. 0 is LOW, otherwise is HIGH
+        :param DB4_level: DB4 pin level. 0 is LOW, otherwise is HIGH
         :param RW_level: RW pin level. Default is 0 or Write Mode.
         """
 
