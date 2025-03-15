@@ -1,4 +1,6 @@
-from library.HD44780_LCD_Driver.HAL.abstract.ABC_GPIO4_HAL import GPIO4_HAL
+# Copyright (c) Gao Shibo. All rights reserved.
+# Licensed under The MIT License, see LICENSE in repo's root
+
 from pyb import Pin
 
 class pyb_GPIO4_HAL(GPIO4_HAL):
