@@ -28,7 +28,7 @@ class HD44780_Driver:
                          DB4_level=1,
                          delay_cycles=0)
 
-        sleep_ms(4.1)   # wait more than 4.1ms
+        sleep_ms(5)   # wait more than 4.1ms
 
         board.write_4bit(RS_level=0,
                          RW_level=0,
@@ -69,7 +69,7 @@ class HD44780_Driver:
                          DB3_level=0, DB2_level=0, DB1_level=0, DB0_level=0, #  DB0~DB3 are ignored
                          delay_cycles=0)
 
-        sleep_ms(4.1)   # wait for more than 4.1ms
+        sleep_ms(5)   # wait for more than 4.1ms
 
         board.write_8bit(RS_level=0,
                          RW_level=0,
