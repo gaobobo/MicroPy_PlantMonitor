@@ -147,22 +147,22 @@ class HD44780_Driver:
         self.board.write(RS_level=instruction_set.WriteToCmdReg.RS,
                          DBs_level= instruction)
 
-    def function_set(self, length_8bit:bool, display_2lines:bool, font_5x10dot:bool):
+    def function_set(self, is_length_8bit:bool, is_display_2lines:bool, is_font_5x10dot:bool):
         """
 
-        :param length_8bit: True is 8bit, False is 4bit.
-        :param display_2lines: True is 2 lines, False is 1 line. 5x10 dot only support 1 line and will as 1 line.
-        :param font_5x10dot: True is 5x10 dots font, False is 5x8 dots.
+        :param is_length_8bit: True is 8bit, False is 4bit.
+        :param is_display_2lines: True is 2 lines, False is 1 line. 5x10 dot only support 1 line and will as 1 line.
+        :param is_font_5x10dot: True is 5x10 dots font, False is 5x8 dots.
         """
         instruction = (instruction_set.WriteToCmdReg._LCD_FUNCTION
                        + (instruction_set.WriteToCmdReg._LCD_FUNCTION_8bit
-                          if length_8bit
+                          if is_length_8bit
                           else instruction_set.WriteToCmdReg._LCD_FUNCTION_4bit)
                        + (instruction_set.WriteToCmdReg._LCD_FUNCTION_2line
-                          if display_2lines
+                          if is_display_2lines
                           else instruction_set.WriteToCmdReg._LCD_FUNCTION_1line)
                        + (instruction_set.WriteToCmdReg._LCD_FUNCTION_5x10dot
-                          if font_5x10dot
+                          if is_font_5x10dot
                           else instruction_set.WriteToCmdReg._LCD_FUNCTION_5x8dot)
                        )
 
