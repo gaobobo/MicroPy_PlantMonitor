@@ -128,10 +128,10 @@ class HD44780_instruction_set:
         """Move cursor but keep Display Data RAM."""
         _LCD_SHIFT_DISPLAY = 0x08
         """Move content but keep Display Data RAM."""
-        _LCD_SHIFT_MOVE_LEFT = 0x04
-        """Move left."""
-        _LCD_SHIFT_MOVE_RIGHT = 0x00
+        _LCD_SHIFT_MOVE_RIGHT = 0x04
         """Move right."""
+        _LCD_SHIFT_MOVE_LEFT = 0x00
+        """Move left."""
 
         # ===================Basic Settings========================
 

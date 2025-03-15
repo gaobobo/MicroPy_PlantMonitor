@@ -127,9 +127,9 @@ class HD44780_Driver:
         :param display_shift: True is enabled scroll content(stay the cursor's position), false is disabled.
         """
         instruction = (instruction_set.WriteToCmdReg._LCD_ENTRY_MODE
-                       + (instruction_set.WriteToCmdReg._LCD_ENTRY_MODE_CURSOR_MOVE_LEFT
+                       + (instruction_set.WriteToCmdReg._LCD_ENTRY_MODE_CURSOR_MOVE_RIGHT
                            if cursor_increment
-                           else instruction_set.WriteToCmdReg._LCD_ENTRY_MODE_CURSOR_MOVE_RIGHT)
+                           else instruction_set.WriteToCmdReg._LCD_ENTRY_MODE_CURSOR_MOVE_LEFT)
                        + (instruction_set.WriteToCmdReg._LCD_ENTRY_MODE_SHIFT if display_shift else 0)
                        )
 
