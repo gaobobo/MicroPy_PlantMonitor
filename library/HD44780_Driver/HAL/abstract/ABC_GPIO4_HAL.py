@@ -162,7 +162,7 @@ class GPIO4_HAL(General_HAL):
                         delay_cycles=delay_cycles
                         )
 
-    def read_4bit(self, RS_level:int, delay_cycles:int = 1, RW_level:int = 1) -> int:
+    def read_4bit(self, RS_level:int, delay_cycles:int = 1) -> int:
         """
         **Read 4bit data from DB4~DB7**
 
@@ -178,7 +178,7 @@ class GPIO4_HAL(General_HAL):
         self._write_to_pin(self.pins['RS'], bool(RS_level))
 
         self._init_pin_out(self.pins['RW'])
-        self._write_to_pin(self.pins['RW'], bool(RW_level))
+        self._write_to_pin(self.pins['RW'], True)
 
         self._init_pin_out(self.pins['E'])
         self._write_to_pin(self.pins['E'], False)
