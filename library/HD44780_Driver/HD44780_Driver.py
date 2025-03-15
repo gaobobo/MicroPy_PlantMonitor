@@ -21,7 +21,6 @@ class HD44780_Driver:
         sleep_ms(40)    # wait more than 40ms after Vcc to 2.7V
 
         board.write_4bit(RS_level=0,
-                         RW_level=0,
                          DB7_level=0,
                          DB6_level=0,
                          DB5_level=1,
@@ -31,7 +30,6 @@ class HD44780_Driver:
         sleep_ms(5)   # wait more than 4.1ms
 
         board.write_4bit(RS_level=0,
-                         RW_level=0,
                          DB7_level=0,
                          DB6_level=0,
                          DB5_level=1,
@@ -41,7 +39,6 @@ class HD44780_Driver:
         sleep_us(100)   # wait more than 100μs
 
         board.write_4bit(RS_level=0,
-                         RW_level=0,
                          DB7_level=0,
                          DB6_level=0,
                          DB5_level=1,
@@ -49,7 +46,6 @@ class HD44780_Driver:
                          delay_cycles=1)
 
         board.write_4bit(RS_level=0,
-                         RW_level=0,
                          DB7_level=0,
                          DB6_level=0,
                          DB5_level=1,
@@ -69,7 +65,6 @@ class HD44780_Driver:
         sleep_ms(40)    # wait for more than 40ms after Vcc to 2.7V
 
         board.write_8bit(RS_level=0,
-                         RW_level=0,
                          DB7_level=0,
                          DB6_level=0,
                          DB5_level=1,
@@ -80,7 +75,6 @@ class HD44780_Driver:
         sleep_ms(5)   # wait for more than 4.1ms
 
         board.write_8bit(RS_level=0,
-                         RW_level=0,
                          DB7_level=0,
                          DB6_level=0,
                          DB5_level=1,
@@ -91,7 +85,6 @@ class HD44780_Driver:
         sleep_us(100)   # wait more than 100μs
 
         board.write_8bit(RS_level=0,
-                         RW_level=0,
                          DB7_level=0,
                          DB6_level=0,
                          DB5_level=1,

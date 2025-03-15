@@ -12,14 +12,14 @@ class GPIO8_HAL(General_HAL):
     def write_8bit(self, RS_level:int,
                    DB0_level:int, DB1_level:int, DB2_level:int, DB3_level:int,
                    DB4_level:int, DB5_level:int, DB6_level:int, DB7_level:int,
-                   delay_cycles:int = 1, RW_level:int = 0):
+                   delay_cycles:int = 1):
         pass
 
     def write(self, RS_level: int, DBs_level: int, delay_cycles:int = 1):
         pass
 
 
-    def read_8bit(self, RS_level:int, RW_level:int = 1) -> int:
+    def read_8bit(self, RS_level:int) -> int:
         pass
 
     def read(self, RS_level:int) -> int:
