@@ -1,4 +1,4 @@
-from ..ABC_GPIO4_HAL import GPIO4_HAL
+from library.HD44780_LCD_Driver.HAL.abstract.ABC_GPIO4_HAL import GPIO4_HAL
 from pyb import Pin
 
 class pyb_GPIO4_HAL(GPIO4_HAL):
