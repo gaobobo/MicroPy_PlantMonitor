@@ -206,7 +206,6 @@ class GPIO4_HAL(General_HAL):
 
         :param delay_cycles: Delay cycles
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :param RW_level: RW pin level. Default is 1 or Read Mode.
         :return: A 4bit int number read. From DB4 to DB7.
         """
 
