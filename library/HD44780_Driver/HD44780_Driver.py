@@ -1,10 +1,10 @@
 # Copyright (c) Gao Shibo. All rights reserved.
 # Licensed under The MIT License, see LICENSE in repo's root
 
-from instruction_set import HD44780_instruction_set as instruction_set
-from library.HD44780_LCD_Driver.HAL.abstract.ABC_Gener_HAL import General_HAL
-from library.HD44780_LCD_Driver.HAL.abstract.ABC_GPIO4_HAL import GPIO4_HAL
-from library.HD44780_LCD_Driver.HAL.abstract.ABC_GPIO8_HAL import GPIO8_HAL
+from .instruction.instruction_set import HD44780_instruction_set as instruction_set
+from .HAL.abstract.ABC_Gener_HAL import General_HAL
+from .HAL.abstract.ABC_GPIO4_HAL import GPIO4_HAL
+from .HAL.abstract.ABC_GPIO8_HAL import GPIO8_HAL
 from time import sleep_us, sleep_ms
 
 class HD44780_Driver:
