@@ -1,4 +1,4 @@
-from ABC_Gener_HAL import General_HAL
+from .ABC_Gener_HAL import General_HAL
 
 class GPIO8_HAL(General_HAL):
     #TODO: complete 8pins HAL. Ref 4pins.

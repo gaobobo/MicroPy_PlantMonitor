@@ -3,7 +3,7 @@
 
 from machine import Pin
 from time import sleep_us
-from .ABC_GPIO8_HAL import General_HAL
+from .ABC_Gener_HAL import General_HAL
 
 class GPIO4_HAL(General_HAL):
 
