@@ -10,7 +10,7 @@ class GPIO8_HAL(General_HAL):
                    DB4:int, DB5:int, DB6:int, DB7:int):
         pass
 
-    def init_manually_8pin(self) -> None:
+    def init_manually(self) -> None:
         """
         **Initialization by instructions in 8pins**
 
