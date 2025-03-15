@@ -233,7 +233,10 @@ class GPIO4_HAL(General_HAL):
         self._delay(delay_cycles)  # wait finish command
 
         data = 0
-        data += (self._read_from_pin(pin) << (i - 1) for i, (pin) in enumerate(self.pins.values()[3:]))
+        data += self.pins["DB7"].value() << 3
+        data += self.pins["DB6"].value() << 2
+        data += self.pins["DB5"].value() << 1
+        data += self.pins["DB4"].value()
 
         return data
 
