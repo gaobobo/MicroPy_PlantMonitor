@@ -3,6 +3,8 @@
 
 class General_HAL :
 
+    pins:dict[str, any]
+
     def init_manually(self):
         pass
 
