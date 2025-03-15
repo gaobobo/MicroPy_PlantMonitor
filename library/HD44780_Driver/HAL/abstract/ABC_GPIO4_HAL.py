@@ -147,18 +147,18 @@ class GPIO4_HAL(General_HAL):
             raise RuntimeError('DBs_level > 0xFF. Must be 8bit.')
 
         self.write_4bit(RS_level=RS_level,
-                        DB4_level=DBs_level & 0x80,
-                        DB5_level=DBs_level & 0x40,
-                        DB6_level=DBs_level & 0x20,
-                        DB7_level=DBs_level & 0x10,
+                        DB7_level=DBs_level & 0x80,
+                        DB6_level=DBs_level & 0x40,
+                        DB5_level=DBs_level & 0x20,
+                        DB4_level=DBs_level & 0x10,
                         delay_cycles=1
                         )
 
         self.write_4bit(RS_level=RS_level,
-                        DB4_level=DBs_level & 0x08,
-                        DB5_level=DBs_level & 0x04,
-                        DB6_level=DBs_level & 0x02,
-                        DB7_level=DBs_level & 0x01,
+                        DB7_level=DBs_level & 0x08,
+                        DB6_level=DBs_level & 0x04,
+                        DB5_level=DBs_level & 0x02,
+                        DB4_level=DBs_level & 0x01,
                         delay_cycles=delay_cycles
                         )
 
