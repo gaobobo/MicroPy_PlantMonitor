@@ -4,6 +4,7 @@
 from machine import Pin
 from time import sleep_us, sleep_ms
 from .ABC_Gener_HAL import General_HAL
+from math import ceil
 
 class GPIO4_HAL(General_HAL):
 
@@ -59,7 +60,7 @@ class GPIO4_HAL(General_HAL):
         :param cycle: Delay cycles
         """
 
-        sleep_us(37 * cycle)
+        sleep_us(ceil(3.7 * cycle))
 
     pins:dict[str, any] = None
     """**Pins from RS, RW, E and DB4~DB7** {PinName: PinObject}"""
@@ -120,14 +121,14 @@ class GPIO4_HAL(General_HAL):
                          DB6_level=0,
                          DB5_level=1,
                          DB4_level=1,
-                         delay_cycles=1)
+                         delay_cycles=10)
 
         self.write_4bit(RS_level=0,
                          DB7_level=0,
                          DB6_level=0,
                          DB5_level=1,
                          DB4_level=0,
-                         delay_cycles=1)
+                         delay_cycles=10)
 
     def write_4bit(self, RS_level:int, DB7_level:int, DB6_level:int, DB5_level:int, DB4_level:int,
                    delay_cycles:int = 0):
@@ -172,7 +173,7 @@ class GPIO4_HAL(General_HAL):
         self._delay(delay_cycles)   # wait finish command
 
 
-    def write(self, RS_level: int, DBs_level: int, delay_cycles:int = 1):
+    def write(self, RS_level: int, DBs_level: int, delay_cycles:int = 10):
         """
         **Write instructions to GPIO**
 
@@ -200,7 +201,7 @@ class GPIO4_HAL(General_HAL):
                         delay_cycles=delay_cycles
                         )
 
-    def read_4bit(self, RS_level:int, delay_cycles:int = 1) -> int:
+    def read_4bit(self, RS_level:int, delay_cycles:int = 10) -> int:
         """
         **Read 4bit data from DB4~DB7**
 
