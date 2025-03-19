@@ -133,10 +133,10 @@ class HD44780_Driver:
         set in WriteToCommandRegister.
         :param data: data to write.
         """
-        self.board.write(RS_level=1, DBs_level=data)
+        self.board.write(RS_level=1, DBs_level=data, delay_cycles=1)
 
     def read_data_from_ram(self) -> int:
         """**Read data from CGRAM or DDRAM.** Read witch register is depend on witch Register Address last
         set in WriteToCommandRegister.
         :return: data read"""
-        return self.board.read(RS_level=1)
+        return self.board.read(RS_level=1, delay_cycles=1)
