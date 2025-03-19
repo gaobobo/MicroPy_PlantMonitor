@@ -242,17 +242,18 @@ class GPIO4_HAL(General_HAL):
         return data
 
 
-    def read(self, RS_level:int) -> int:
+    def read(self, RS_level:int, delay_cycles:int = 10) -> int:
         """
         **Read data from DB pins**
 
         Read twice although only 4 pins. To read only once, use self.read_4bit().
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
         :return: A 8bit int number read. From DB0 to DB7
+        :param delay_cycles: Delay cycles
         """
         data = 0
         data += self.read_4bit(RS_level) << 4
 
-        data += self.read_4bit(RS_level)
+        data += self.read_4bit(RS_level, delay_cycles)
 
         return data
