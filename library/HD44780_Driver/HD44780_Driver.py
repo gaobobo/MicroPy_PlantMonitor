@@ -19,13 +19,13 @@ class HD44780_Driver:
         """Clear Display Data RAM and set Address Counter to 0."""
         self.board.write(RS_level=0,
                          DBs_level=LCD_CLEAR,
-                         delay_cycles=42)   # need 1.52ms in typical frequency
+                         delay_cycles=420)   # need 1.52ms in typical frequency
 
     def return_home(self) -> None:
         """set Address Counter to 0."""
         self.board.write(RS_level=0,
                          DBs_level=LCD_TO_HOME,
-                         delay_cycles=42)    # need 1.52ms in typical frequency
+                         delay_cycles=420)    # need 1.52ms in typical frequency
 
     def entry_mode_set(self, cursor_increment:bool = True, display_shift:bool = False) -> None:
         """Control action when read or write.
