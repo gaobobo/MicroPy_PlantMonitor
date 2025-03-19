@@ -2,7 +2,7 @@
 # Licensed under The MIT License, see LICENSE in repo's root
 
 from .instruction.instruction_const import *
-from library.HD44780_Driver.HAL.ABC_Gener_HAL import General_HAL
+from .HAL.ABC_Gener_HAL import General_HAL
 
 class HD44780_Driver:
 
