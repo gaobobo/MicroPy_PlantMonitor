@@ -2,7 +2,7 @@
 # Licensed under The MIT License, see LICENSE in repo's root
 
 from pyb import Pin
-from library.lcd.HD44780_Driver.HAL.ABC_GPIO4_HAL import GPIO4_HAL
+from library.HD44780_Driver.HAL.ABC_GPIO4_HAL import GPIO4_HAL
 
 class pyb_GPIO4_HAL(GPIO4_HAL):
 
