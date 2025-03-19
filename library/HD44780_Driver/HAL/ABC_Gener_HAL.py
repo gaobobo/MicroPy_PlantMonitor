@@ -8,8 +8,8 @@ class General_HAL :
     def init_manually(self):
         pass
 
-    def write(self, RS_level: int, DBs_level: int, delay_cycles:int = 1):
+    def write(self, RS_level: int, DBs_level: int, delay_cycles:int = 10):
         pass
 
-    def read(self, RS_level:int) -> int:
+    def read(self, RS_level:int, delay_cycles:int = 10) -> int:
         pass
