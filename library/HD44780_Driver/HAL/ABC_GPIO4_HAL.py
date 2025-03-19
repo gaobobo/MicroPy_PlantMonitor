@@ -53,7 +53,7 @@ class GPIO4_HAL(General_HAL):
         """
         **Delay time by cycle**
 
-        The HD44780U's typical frequency is 270kHz, means about 37 microseconds per clock cycle.
+        The HD44780U's typical frequency is 270kHz, means about 3.7 microseconds per clock cycle.
         However, the frequency maybe from 190kHZ to 350kHz. Override this function to fit your
         actual frequency if needed.
         :param cycle: Delay cycles
