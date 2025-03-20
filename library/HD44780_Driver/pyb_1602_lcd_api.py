@@ -162,8 +162,7 @@ class lcd_api:
 
     def print(self, content:str, auto_return:bool = False) -> None:
         for char in content:
-
-            if auto_return and self.cursor_offset == 16:
+            if auto_return and self.cursor_offset == 15:
                 self.cursor_move_to(1, 0)
 
             if (0x7D >= ord(char) >= 0x20
