@@ -133,33 +133,6 @@ class lcd_api:
         self.cursor_offset += 1
 
 
-    def print_frame_buffer(self) -> None:
-        def write_to_cg(row:int, col:int, index:int) -> None:
-            for i in range(0, 7):
-                self.driver.set_cg_ram(index + i)
-                x = row * 8
-                y = col * 5
-                char_single_line = 0
-                char_single_line += self._frame_buffer.pixel(x, y + i) << 4
-                char_single_line += self._frame_buffer.pixel(x + 1, y + i) << 3
-                char_single_line += self._frame_buffer.pixel(x + 2, y + i) << 2
-                char_single_line += self._frame_buffer.pixel(x + 3, y + i) << 1
-                char_single_line += self._frame_buffer.pixel(x + 4, y + i)
-
-                self.driver.write_data_to_ram(0b000 + char_single_line)
-
-        def print_cg(index:int) -> None:
-            self.cursor_return()  # set DDRAM address before write
-            self.driver.write_data_to_ram(0b000 + index)
-            self.cursor_offset += 1
-
-        for i in range(1, 80):
-            write_to_cg( i // 40, i % 40, i % 8)
-
-            if i % 8 == 0:
-                for j in range(0, 7): print_cg(j)
-
-
     def print(self, content:str, auto_return:bool = False) -> None:
         for char in content:
             if auto_return and self.cursor_offset == 15:
