@@ -107,10 +107,6 @@ class lcd_api:
     def print_btree_font(self, char:int) -> None:
         pass
 
-    def get_frame_buffer(self) -> FrameBuffer:
-        self._frame_buffer = FrameBuffer(bytearray(5 * 8 * 80), 5 * 40, 8 * 2, MONO_VLSB)
-        self._frame_buffer.fill(0)
-        return self._frame_buffer
 
     def print_custom_char(self, char:FrameBuffer, auto_return:bool = False) -> None:
         if auto_return and self.cursor_offset == 16:
