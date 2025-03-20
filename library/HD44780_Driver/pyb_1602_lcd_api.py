@@ -19,8 +19,6 @@ class lcd_api:
     cursor_offset = 0
     display_offset = 0
 
-    _frame_buffer:FrameBuffer = None
-
     def __init__(self, board:General_HAL) -> None:
         self.board = board
         self.board.init_manually()
