@@ -116,7 +116,7 @@ class lcd_api:
         if auto_return and self.cursor_offset == 16:
             self.cursor_move_to(1, 0)
 
-        for i in range(0, 7):
+        for i in range(0, 8):
             self.driver.set_cg_ram(0b000 + i)
 
             char_single_line = 0
