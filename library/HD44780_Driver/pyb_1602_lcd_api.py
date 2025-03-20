@@ -3,7 +3,7 @@
 
 from .HAL.ABC_Gener_HAL import General_HAL
 from .HD44780_Driver import HD44780_Driver
-from framebuf import FrameBuffer, MONO_VLSB
+from framebuf import FrameBuffer
 # change import to your CGROM version. Only Standard ASCII exclude \ and ~,
 # import custom and keep it empty.
 from .char_sets import custom as char_set
