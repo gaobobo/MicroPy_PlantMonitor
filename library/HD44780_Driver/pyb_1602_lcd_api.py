@@ -102,8 +102,26 @@ class lcd_api:
     def print_char(self, char:int) -> None:
         self.driver.write_data_to_ram(char)
 
+    def write_custom_char(self, char:FrameBuffer, index:int) -> None:
+        if index not in range(0, 8):
+            raise RuntimeError("Index out of range. Index must be between 0 and 7")
+
+        for i in range(0, 8):
+            self.driver.set_cg_ram(0b000 + index)
 
     def print_custom_char(self, char:FrameBuffer, auto_return:bool = False) -> None:
+            char_single_line = 0
+            char_single_line += char.pixel(0, i) << 4
+            char_single_line += char.pixel(1, i) << 3
+            char_single_line += char.pixel(2, i) << 2
+            char_single_line += char.pixel(3, i) << 1
+            char_single_line += char.pixel(4, i)
+
+            self.driver.write_data_to_ram(0b000 + char_single_line)
+
+        self.cursor_return()  # set DDRAM address before write
+
+
         if auto_return and self.cursor_offset == 16:
             self.cursor_move_to(1, 0)
 
