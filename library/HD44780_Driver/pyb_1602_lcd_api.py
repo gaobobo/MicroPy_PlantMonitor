@@ -1,0 +1,190 @@
+# Copyright (c) Gao Shibo. All rights reserved.
+# Licensed under The MIT License, see LICENSE in repo's root
+
+from .HAL.ABC_Gener_HAL import General_HAL
+from .HD44780_Driver import HD44780_Driver
+from framebuf import FrameBuffer, MONO_VLSB
+# change import to your CGROM version. Only Standard ASCII exclude \ and ~,
+# import custom and keep it empty.
+from .char_sets import custom as char_set
+
+class lcd_api:
+
+    board:General_HAL = None
+    driver:HD44780_Driver = None
+
+    cursor_enable:bool = False
+    cursor_blink:bool = False
+    display_on:bool = True
+    cursor_offset = 0
+    display_offset = 0
+
+    _frame_buffer:FrameBuffer = None
+
+    def __init__(self, board:General_HAL) -> None:
+        self.board = board
+        self.board.init_manually()
+
+        self.driver = HD44780_Driver(self.board)
+        self.driver.function_set(is_length_8bit=len(self.board.pins)==11   # use 8 bit
+                                                or len(self.board.pins)==2,    #use I2C Bus
+                                 is_display_2lines=True,
+                                 is_font_5x10dot=False)
+        self.driver.display_control(self.display_on, self.cursor_enable, self.cursor_blink)
+        self.driver.clear_display()
+
+    def turn_on_display_or_off(self, is_on: bool|None=None) -> None:
+        self.display_on = not self.display_on if is_on is None else is_on
+        self.driver.display_control(self.display_on, self.cursor_enable, self.cursor_blink )
+
+    def enable_cursor_or_disable(self, is_enable: bool|None=None) -> None:
+        self.cursor_enable = not self.cursor_enable if is_enable is None else is_enable
+        self.driver.display_control(self.display_on, self.cursor_enable, self.cursor_blink)
+
+    def enable_blink_or_disable(self, is_enable: bool|None=None) -> None:
+        self.cursor_blink = not self.cursor_blink if is_enable is None else is_enable
+        self.driver.display_control(self.display_on, self.cursor_enable, self.cursor_blink)
+
+    def clear(self) -> None:
+        self.driver.clear_display()
+        self.cursor_offset = 0
+        self.display_offset = 0
+
+    def cursor_to_home(self) -> None:
+        self.driver.return_home()
+        self.cursor_offset = 0
+        self.display_offset = 0
+
+    def cursor_move_left(self) -> None:
+        self.driver.cursor_or_display_shift(True, False)
+        self.cursor_offset -= 1 if self.cursor_offset >= 0 else 0
+
+
+    def cursor_move_right(self, auto_return:bool = False) -> None:
+        self.driver.cursor_or_display_shift(True, True)
+        self.cursor_offset += 1 if self.cursor_offset <= 80 else 0
+        if auto_return and self.cursor_offset == 16:
+            self.cursor_move_to(1, 0)
+
+    def content_move_left(self) -> None:
+        self.driver.cursor_or_display_shift(False, False)
+        self.display_offset -= 1
+
+    def content_move_right(self) -> None:
+        self.driver.cursor_or_display_shift(False, True)
+        self.display_offset += 1
+
+    def cursor_move_to(self, row:int, col:int) -> None:
+        if row not in [0, 1] :
+            raise RuntimeError("Row must is 0 or 1.")
+        elif col >= 40:
+            raise RuntimeError("every line max 39 chars. First one is 0.")
+        else:
+            address = 0x40 * row + col
+
+        self.driver.set_dd_ram(address)
+        self.cursor_offset = row * 40 + col
+
+    def cursor_return(self) -> None:
+        self.cursor_move_to( (self.cursor_offset // 40),
+                            self.cursor_offset % 40 )
+
+
+    def cursor_move_up(self) -> None:
+        self.cursor_offset -= 40 if self.cursor_offset > 40 else 0
+        self.cursor_return()
+
+    def cursor_move_down(self) -> None:
+        self.cursor_offset += 40 if self.cursor_offset < 40 else 0
+        self.cursor_return()
+
+    def entry_mode_setting(self, is_from_to_right:bool, is_scroll_content:bool) -> None:
+        self.driver.entry_mode_set(is_from_to_right, is_scroll_content)
+
+    def print_char(self, char:int) -> None:
+        self.driver.write_data_to_ram(char)
+
+    def print_btree_font(self, char:int) -> None:
+        pass
+
+    def get_frame_buffer(self) -> FrameBuffer:
+        self._frame_buffer = FrameBuffer(bytearray(5 * 8 * 80), 5 * 40, 8 * 2, MONO_VLSB)
+        self._frame_buffer.fill(0)
+        return self._frame_buffer
+
+    def print_custom_char(self, char:FrameBuffer, auto_return:bool = False) -> None:
+        if auto_return and self.cursor_offset == 16:
+            self.cursor_move_to(1, 0)
+
+        for i in range(0, 7):
+            self.driver.set_cg_ram(0b000 + i)
+
+            char_single_line = 0
+            char_single_line += char.pixel(0, i) << 4
+            char_single_line += char.pixel(1, i) << 3
+            char_single_line += char.pixel(2, i) << 2
+            char_single_line += char.pixel(3, i) << 1
+            char_single_line += char.pixel(4, i)
+
+            self.driver.write_data_to_ram(0b000 + char_single_line)
+
+        self.cursor_return()    # set DDRAM address before write
+        self.driver.write_data_to_ram(0b000 + 0b000)
+        self.cursor_offset += 1
+
+
+    def print_frame_buffer(self) -> None:
+        def write_to_cg(row:int, col:int, index:int) -> None:
+            for i in range(0, 7):
+                self.driver.set_cg_ram(index + i)
+                x = row * 8
+                y = col * 5
+                char_single_line = 0
+                char_single_line += self._frame_buffer.pixel(x, y + i) << 4
+                char_single_line += self._frame_buffer.pixel(x + 1, y + i) << 3
+                char_single_line += self._frame_buffer.pixel(x + 2, y + i) << 2
+                char_single_line += self._frame_buffer.pixel(x + 3, y + i) << 1
+                char_single_line += self._frame_buffer.pixel(x + 4, y + i)
+
+                self.driver.write_data_to_ram(0b000 + char_single_line)
+
+        def print_cg(index:int) -> None:
+            self.cursor_return()  # set DDRAM address before write
+            self.driver.write_data_to_ram(0b000 + index)
+            self.cursor_offset += 1
+
+        for i in range(1, 80):
+            write_to_cg( i // 40, i % 40, i % 8)
+
+            if i % 8 == 0:
+                for j in range(0, 7): print_cg(j)
+
+
+    def print(self, content:str, auto_return:bool = False) -> None:
+        for char in content:
+
+            if auto_return and self.cursor_offset == 16:
+                self.cursor_move_to(1, 0)
+
+            if (0x7D >= ord(char) >= 0x20
+                    and ord(char) != 0x5C): # Same as ASCII, exclude /(0x5C) and ~(0x7E)
+                self.print_char(ord(char))
+
+            elif char in char_set:
+                pass
+            else:
+                self.print_btree_font(ord(char))
+
+            self.cursor_offset += 1
+
+
+    def is_busy(self) -> bool:
+        busy,add = self.driver.read_busy_flag_and_address()
+        return busy
+
+    def ram_counter(self) -> bool:
+        busy, add = self.driver.read_busy_flag_and_address()
+        return add
+
+    def ram_data(self) -> int:
+        return self.driver.read_data_from_ram()
