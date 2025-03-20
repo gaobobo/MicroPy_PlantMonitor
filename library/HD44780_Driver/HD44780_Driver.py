@@ -122,7 +122,7 @@ class HD44780_Driver:
         ready to accept instruction. address is current Address Counter, which is read depending on
         last SET_CGRAM_ADDRESS or SET_DDRAM_ADDRESS ran.
         """
-        data = self.board.read(RS_level=0)
+        data = self.board.read(RS_level=0, delay_cycles=0)
         busy_flag = bool(data & 0x80)
         address = data << 1
         return busy_flag, address
