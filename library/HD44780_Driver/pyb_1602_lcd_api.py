@@ -135,6 +135,8 @@ class lcd_api:
 
             elif char in char_set:
                 pass
+            else:
+                raise RuntimeError(f"Unknown char: {char}")
 
             self.cursor_offset += 1
 
