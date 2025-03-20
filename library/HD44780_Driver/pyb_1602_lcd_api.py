@@ -102,9 +102,6 @@ class lcd_api:
     def print_char(self, char:int) -> None:
         self.driver.write_data_to_ram(char)
 
-    def print_btree_font(self, char:int) -> None:
-        pass
-
 
     def print_custom_char(self, char:FrameBuffer, auto_return:bool = False) -> None:
         if auto_return and self.cursor_offset == 16:
@@ -138,8 +135,6 @@ class lcd_api:
 
             elif char in char_set:
                 pass
-            else:
-                self.print_btree_font(ord(char))
 
             self.cursor_offset += 1
 
