@@ -134,7 +134,8 @@ class lcd_api:
                 self.print_char(ord(char))
 
             elif char in char_set:
-                pass
+                self.print_char(char_set[char])
+
             else:
                 raise RuntimeError(f"Unknown char: {char}")
 
