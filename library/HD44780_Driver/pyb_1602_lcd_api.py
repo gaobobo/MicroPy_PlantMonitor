@@ -142,7 +142,7 @@ class lcd_api:
                     and ord(char) != 0x5C): # Same as ASCII, exclude /(0x5C) and ~(0x7E)
                 self.print_char(ord(char))
 
-            elif char in char_set:
+            elif char in char_set.keys():
                 self.print_char(char_set[char])
 
             else:
