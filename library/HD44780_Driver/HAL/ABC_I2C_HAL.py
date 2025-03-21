@@ -58,9 +58,6 @@ class GPIO8_HAL(General_HAL):
 
     def write(self, DBs_level: int, delay_cycles:int = 10, RS_level: int = None):
 
-        if RS_level is None:
-            raise RuntimeError('This I2C device only support write to DDRAM.')
-
         self.pins["I2C"].writeto(self.address, DBs_level)
         self._delay(delay_cycles)
 
