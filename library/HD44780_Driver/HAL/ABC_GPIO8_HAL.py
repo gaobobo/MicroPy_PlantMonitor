@@ -65,7 +65,7 @@ class GPIO8_HAL(General_HAL):
         :param cycle: Delay cycles
         """
 
-        sleep_us(ceil(3.7 * cycle))
+        sleep_us(4 * cycle)
 
     pins:dict[str, any] = None
     """**Pins from RS, RW, E and DB4~DB7** {PinName: PinObject}"""
