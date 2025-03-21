@@ -2,7 +2,7 @@
 # Licensed under the MIT License, see LICENSE in repo's root
 
 """
-**Hardware of GPIO4**
+**HAL of GPIO4**
 
 Extend this class to use RS, RW, E, DB4, DB5, DB6, DB7 to communicate with hardware.
 """
