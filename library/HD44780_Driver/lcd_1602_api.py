@@ -58,7 +58,7 @@ class lcd_api:
                                                 or len(self.board.pins)==2,    #use I2C Bus
                                  is_display_2lines=True,
                                  is_font_5x10dot=False)
-        self.driver.display_control(self.display_on, self.cursor_enable, self.cursor_blink)
+        self.driver.display_control(self._display_on, self._cursor_enable, self._cursor_blink)
         self.driver.clear_display()
 
     def turn_on_display_or_off(self, is_on: bool|None=None) -> None:
@@ -70,8 +70,8 @@ class lcd_api:
         :param is_on: Turn on display or off. True is on and False is off, None is switching between
          on and off.
         """
-        self.display_on = not self.display_on if is_on is None else is_on
-        self.driver.display_control(self.display_on, self.cursor_enable, self.cursor_blink )
+        self._display_on = not self._display_on if is_on is None else is_on
+        self.driver.display_control(self._display_on, self._cursor_enable, self._cursor_blink)
 
     def enable_cursor_or_disable(self, is_enable: bool|None=None) -> None:
         """
@@ -79,8 +79,8 @@ class lcd_api:
         :param is_enable: Display or not display. True is display and False is not display. None is
          switching between display and not display.
         """
-        self.cursor_enable = not self.cursor_enable if is_enable is None else is_enable
-        self.driver.display_control(self.display_on, self.cursor_enable, self.cursor_blink)
+        self._cursor_enable = not self._cursor_enable if is_enable is None else is_enable
+        self.driver.display_control(self._display_on, self._cursor_enable, self._cursor_blink)
 
     def enable_blink_or_disable(self, is_enable: bool|None=None) -> None:
         """
@@ -88,8 +88,8 @@ class lcd_api:
         :param is_enable:  Enable blink or disable. True is enabled and False is disabled. None is
         switching between enable and disable.
         """
-        self.cursor_blink = not self.cursor_blink if is_enable is None else is_enable
-        self.driver.display_control(self.display_on, self.cursor_enable, self.cursor_blink)
+        self._cursor_blink = not self._cursor_blink if is_enable is None else is_enable
+        self.driver.display_control(self._display_on, self._cursor_enable, self._cursor_blink)
 
     def clear(self) -> None:
         """
@@ -97,23 +97,23 @@ class lcd_api:
         NOTICE: No need to move cursor to home.
         """
         self.driver.clear_display()
-        self.cursor_offset = 0
-        self.display_offset = 0
+        self._cursor_offset = 0
+        self._display_offset = 0
 
     def cursor_to_home(self) -> None:
         """
         **Move cursor to home**
         """
         self.driver.return_home()
-        self.cursor_offset = 0
-        self.display_offset = 0
+        self._cursor_offset = 0
+        self._display_offset = 0
 
     def cursor_move_left(self) -> None:
         """
         **Move cursor to left**
         """
         self.driver.cursor_or_display_shift(True, False)
-        self.cursor_offset -= 1 if self.cursor_offset >= 0 else 0
+        self._cursor_offset -= 1 if self._cursor_offset >= 0 else 0
 
 
     def cursor_move_right(self, auto_return:bool = False) -> None:
@@ -123,8 +123,8 @@ class lcd_api:
         NOT 40 chars. True is enabled and False is disabled.
         """
         self.driver.cursor_or_display_shift(True, True)
-        self.cursor_offset += 1 if self.cursor_offset <= 80 else 0
-        if auto_return and self.cursor_offset == 16:
+        self._cursor_offset += 1 if self._cursor_offset <= 80 else 0
+        if auto_return and self._cursor_offset == 16:
             self.cursor_move_to(1, 0)
 
     def content_move_left(self) -> None:
@@ -134,14 +134,14 @@ class lcd_api:
         moving content, the cursor won't move to the first char position and it'll offset with the content.
         """
         self.driver.cursor_or_display_shift(False, False)
-        self.display_offset -= 1
+        self._display_offset -= 1
 
     def content_move_right(self) -> None:
         """
         **Move content cursor to right**
         """
         self.driver.cursor_or_display_shift(False, True)
-        self.display_offset += 1
+        self._display_offset += 1
 
     def cursor_move_to(self, row:int, col:int) -> None:
         """
@@ -157,28 +157,28 @@ class lcd_api:
             address = 0x40 * row + col
 
         self.driver.set_dd_ram(address)
-        self.cursor_offset = row * 40 + col
+        self._cursor_offset = row * 40 + col
 
     def cursor_return(self) -> None:
         """
         **Move cursor back after writing or reading the CGRAM.
         """
-        self.cursor_move_to( (self.cursor_offset // 40),
-                            self.cursor_offset % 40 )
+        self.cursor_move_to((self._cursor_offset // 40),
+                            self._cursor_offset % 40)
 
 
     def cursor_move_up(self) -> None:
         """
         **Move cursor up**
         """
-        self.cursor_offset -= 40 if self.cursor_offset > 40 else 0
+        self._cursor_offset -= 40 if self._cursor_offset > 40 else 0
         self.cursor_return()
 
     def cursor_move_down(self) -> None:
         """
         **Move cursor down**
         """
-        self.cursor_offset += 40 if self.cursor_offset < 40 else 0
+        self._cursor_offset += 40 if self._cursor_offset < 40 else 0
         self.cursor_return()
 
     def entry_mode_setting(self, is_from_to_right:bool, is_scroll_content:bool) -> None:
@@ -231,12 +231,12 @@ class lcd_api:
         if index not in range(0, 8):
             raise RuntimeError("Index out of range. Index must be between 0 and 7")
 
-        if auto_return and self.cursor_offset == 16:
+        if auto_return and self._cursor_offset == 16:
             self.cursor_move_to(1, 0)
 
         self.cursor_return()  # set DDRAM address before write
         self.driver.write_data_to_ram(0b000 + index)
-        self.cursor_offset += 1
+        self._cursor_offset += 1
 
 
     def print(self, content:str, auto_return:bool = False) -> None:
@@ -247,7 +247,7 @@ class lcd_api:
         NOT 40 chars. True is enabled and False is disabled.
         """
         for char in content:
-            if auto_return and self.cursor_offset == 15:
+            if auto_return and self._cursor_offset == 15:
                 self.cursor_move_to(1, 0)
 
             if (0x7D >= ord(char) >= 0x20
@@ -260,7 +260,7 @@ class lcd_api:
             else:
                 raise RuntimeError(f"Unknown char: {char}")
 
-            self.cursor_offset += 1
+            self._cursor_offset += 1
 
 
     def is_busy(self) -> bool:
