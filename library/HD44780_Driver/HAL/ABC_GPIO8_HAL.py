@@ -6,18 +6,84 @@
 
 Extend this class to use RS, RW, E, DB0 ~ DB7 to communicate with hardware.
 """
-
-from .ABC_Gener_HAL import General_HAL
+from machine import Pin
 from time import sleep_us, sleep_ms
 
 class GPIO8_HAL(General_HAL):
-    #TODO: complete 8pins HAL. Ref 4pins.
-    # must at least below func.
 
-    def __init__(self, RS:int, RW:int,
-                   DB0:int, DB1:int, DB2:int, DB3:int,
-                   DB4:int, DB5:int, DB6:int, DB7:int):
-        pass
+    def _init_pin_in(self, pin:Pin):
+        """
+        **Init pin to INPUT mode**
+
+        This function used machine.Pin lib, and you could use super()._init_pin_in() to call.
+        For specific lib like pyb.Pin, you must achieve yourself.
+        :param pin: pin to initialize
+        """
+        pin.init(mode=Pin.IN)
+
+    def _init_pin_out(self, pin:Pin):
+        """
+        **Init pin to OUTPUT mode**
+
+        This function used machine.Pin lib, and you could use super()._init_pin_in() to call.
+        For specific lib like pyb.Pin, you must achieve yourself.
+        :param pin: pin to initialize
+        """
+        pin.init(mode=Pin.OUT)
+
+    def _write_to_pin(self, pin:Pin, is_high:bool):
+        """
+        **Set pin to high or low in OUTPUT mode**
+
+        This function used machine.Pin lib, and you could use super()._init_pin_in() to call.
+        For specific lib like pyb.Pin, you must achieve yourself.
+        :param pin: pin to set
+        :param is_high: false is LOW, true is HIGH
+        """
+        pin.on() if is_high else pin.off()
+
+    def _read_from_pin(self, pin:Pin) -> int:
+        """
+        **Read level from pin in INPUT mode**
+
+        This function used machine.Pin lib, and you could use super()._init_pin_in() to call.
+        For specific lib like pyb.Pin, you must achieve yourself.
+        :param pin: pin to read
+        :return: pin's value
+        """
+        return pin.value()
+
+    def _delay(self, cycle:int):
+        """
+        **Delay time by cycle**
+
+        The HD44780U's typical frequency is 270kHz, means about 3.7 microseconds per clock cycle.
+        However, the frequency maybe from 190kHZ to 350kHz. Override this function to fit your
+        actual frequency if needed.
+        :param cycle: Delay cycles
+        """
+
+        sleep_us(ceil(3.7 * cycle))
+
+    pins:dict[str, any] = None
+    """**Pins from RS, RW, E and DB4~DB7** {PinName: PinObject}"""
+
+    def __init__(self, RS, RW, E,
+                 DB0, DB1, DB2, DB3, DB4, DB5, DB6, DB7) -> None:
+
+        self.pins = {
+            'RS': RS,
+            'RW': RW,
+            'E': E,
+            'DB0': DB0,
+            'DB1': DB1,
+            'DB2': DB2,
+            'DB3': DB3,
+            'DB4': DB4,
+            'DB5': DB5,
+            'DB6': DB6,
+            'DB7': DB7
+        }
 
     def init_manually(self) -> None:
         """
