@@ -107,7 +107,7 @@ class lcd_api:
             raise RuntimeError("Index out of range. Index must be between 0 and 7")
 
         for i in range(0, 8):
-            self.driver.set_cg_ram(0b000 + index)
+            self.driver.set_cg_ram(index + i)
 
             char_single_line = 0
             char_single_line += char.pixel(0, i) << 4
