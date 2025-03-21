@@ -24,11 +24,11 @@ class lcd_api:
     board:General_HAL = None
     driver:HD44780_Driver = None
 
-    cursor_enable:bool = False
-    cursor_blink:bool = False
-    display_on:bool = True
-    cursor_offset = 0
-    display_offset = 0
+    _cursor_enable:bool = False
+    _cursor_blink:bool = False
+    _display_on:bool = True
+    _cursor_offset = 0
+    _display_offset = 0
 
     def __init__(self, board:General_HAL) -> None:
         self.board = board
