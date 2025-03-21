@@ -9,7 +9,6 @@ Extend this class to use RS, RW, E, DB0 ~ DB7 to communicate with hardware.
 from machine import Pin
 from time import sleep_us, sleep_ms
 from .ABC_Gener_HAL import General_HAL
-from math import ceil
 
 class GPIO8_HAL(General_HAL):
 
