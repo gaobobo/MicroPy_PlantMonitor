@@ -4,9 +4,19 @@
 from .HAL.ABC_Gener_HAL import General_HAL
 from .HD44780_Driver import HD44780_Driver
 from framebuf import FrameBuffer
-# change import to your CGROM version. Only Standard ASCII exclude \ and ~,
-# import custom and keep it empty.
+
+# For only ASCII char display(exclude \ and ~), import below and keep char_set.custom empty
 from .char_sets import custom as char_set
+
+# For Japanese HD44780, import below
+# from .char_sets import japanese as char_set
+
+# For European HD44780, import below
+# from .char_sets import european as char_set
+
+# For customized HD44780, fill char_set.custom and import below
+# from .char_sets import custom as char_set
+
 
 class lcd_api:
 
