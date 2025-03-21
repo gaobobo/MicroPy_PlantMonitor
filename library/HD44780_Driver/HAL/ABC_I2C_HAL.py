@@ -4,7 +4,7 @@
 """
 **Hardware of I2C**
 
-Extend this class to use RS, RW, E, DB0 ~ DB7 to communicate with hardware.
+Extend this class to use I2C to communicate with hardware.
 """
 
 from .ABC_Gener_HAL import General_HAL
@@ -57,9 +57,29 @@ class GPIO8_HAL(General_HAL):
 
 
     def write(self, DBs_level: int, delay_cycles:int = 10, RS_level: int = None):
+        """
+        **Write instructions to GPIO**
+
+        Most I2C Bus Controller only support 8bit, meaning RS and RW are LOW or only support display char
+        in ROM. However, if your I2C Board supports RS and RW pins switch, override this func.
+        :param DBs_level: RS pin level. 0 is LOW, otherwise is HIGH
+        :param delay_cycles: Delay cycles
+        :param RS_level: Ignore by default
+        :return:
+        """
 
         self.pins["I2C"].writeto(self.address, DBs_level)
         self._delay(delay_cycles)
 
     def read(self, RS_level:int, delay_cycles:int = 10) -> int:
+        """
+        **Read data from DB pins**
+
+        Most I2C Bus Controller only support 8bit, meaning RS and RW are LOW or only support display char
+        in ROM. However, if your I2C Board supports RS and RW pins switch, override this func.
+        Read twice although only 4 pins. To read only once, use self.read_4bit().
+        :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
+        :return: A 8bit int number read. From DB0 to DB7
+        :param delay_cycles: Delay cycles
+        """
         raise RuntimeError("This I2C device only support write.")
