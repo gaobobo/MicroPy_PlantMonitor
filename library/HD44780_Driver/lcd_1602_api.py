@@ -54,8 +54,7 @@ class lcd_api:
         self.board.init_manually()
 
         self.driver = HD44780_Driver(self.board)
-        self.driver.function_set(is_length_8bit=len(self.board.pins)==11   # use 8 bit
-                                                or len(self.board.pins)==2,    #use I2C Bus
+        self.driver.function_set(is_length_8bit= len(self.board.pins) != 7,   # use 8 bit
                                  is_display_2lines=True,
                                  is_font_5x10dot=False)
         self.driver.display_control(self._display_on, self._cursor_enable, self._cursor_blink)
