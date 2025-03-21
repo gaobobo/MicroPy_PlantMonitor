@@ -269,7 +269,7 @@ class lcd_api:
         :return: True is busy and False is prepared to receive instruction.
         """
         busy,_ = self.driver.read_busy_flag_and_address()
-        return busy
+        return not busy
 
     def ram_counter(self) -> int:
         """
