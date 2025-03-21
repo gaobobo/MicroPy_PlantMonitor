@@ -188,8 +188,6 @@ class GPIO4_HAL(General_HAL):
         :param DBs_level: A 8bit int number composed of DB pins' level, from low bit DB0 to high bit DB7.
         :param delay_cycles: Delay cycles
         """
-        if DBs_level > 0xFF:
-            raise RuntimeError('DBs_level > 0xFF. Must be 8bit.')
 
         self.write_4bit(RS_level=RS_level,
                         DB7_level=DBs_level & 0x80,

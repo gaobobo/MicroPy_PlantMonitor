@@ -57,8 +57,6 @@ class GPIO8_HAL(General_HAL):
 
 
     def write(self, DBs_level: int, delay_cycles:int = 10, RS_level: int = None):
-        if DBs_level > 0xFF:
-            raise RuntimeError('DBs_level > 0xFF. Must be 8bit.')
 
         if RS_level is None:
             raise RuntimeError('This I2C device only support write to DDRAM.')

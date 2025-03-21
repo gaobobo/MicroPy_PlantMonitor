@@ -131,8 +131,6 @@ class GPIO8_HAL(General_HAL):
         pass
 
     def write(self, RS_level: int, DBs_level: int, delay_cycles:int = 1):
-        if DBs_level > 0xFF:
-            raise RuntimeError('DBs_level > 0xFF. Must be 8bit.')
 
         self.write_8bit(RS_level=RS_level,
                         DB7_level=DBs_level & 0x80,
