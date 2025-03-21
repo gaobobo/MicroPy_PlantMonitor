@@ -1,6 +1,12 @@
 # Copyright (c) Gao Shibo. All rights reserved.
 # Licensed under the MIT License, see LICENSE in repo's root
 
+"""
+**Hardware of GPIO4**
+
+Extend this class to use RS, RW, E, DB0 ~ DB7 to communicate with hardware.
+"""
+
 from .ABC_Gener_HAL import General_HAL
 from time import sleep_us, sleep_ms
 
