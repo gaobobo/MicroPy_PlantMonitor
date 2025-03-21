@@ -8,6 +8,8 @@ Extend this class to use RS, RW, E, DB0 ~ DB7 to communicate with hardware.
 """
 from machine import Pin
 from time import sleep_us, sleep_ms
+from .ABC_Gener_HAL import General_HAL
+from math import ceil
 
 class GPIO8_HAL(General_HAL):
 
@@ -130,7 +132,23 @@ class GPIO8_HAL(General_HAL):
         pass
 
     def write(self, RS_level: int, DBs_level: int, delay_cycles:int = 1):
-        pass
+        if DBs_level > 0xFF:
+            raise RuntimeError('DBs_level > 0xFF. Must be 8bit.')
+
+        self.write_8bit(RS_level=RS_level,
+                        DB7_level=DBs_level & 0x80,
+                        DB6_level=DBs_level & 0x40,
+                        DB5_level=DBs_level & 0x20,
+                        DB4_level=DBs_level & 0x10,
+                        DB3_level=DBs_level & 0x08,
+                        DB2_level=DBs_level & 0x04,
+                        DB1_level=DBs_level & 0x02,
+                        DB0_level=DBs_level & 0x01,
+                        delay_cycles=delay_cycles
+                        )
+
+
+
 
 
     def read_8bit(self, RS_level:int) -> int:
