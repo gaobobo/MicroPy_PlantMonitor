@@ -149,10 +149,43 @@ class GPIO8_HAL(General_HAL):
 
 
 
+    def read_8bit(self, RS_level:int, delay_cycles:int = 10) -> int:
+        if self.pins['RW'] is None: raise RuntimeError('RW pin is None but try to read.')
+
+        self._init_pin_out(self.pins['RS'])
+        self._write_to_pin(self.pins['RS'], bool(RS_level))
+
+        self._init_pin_out(self.pins['RW'])
+        self._write_to_pin(self.pins['RW'], True)
+
+        self._init_pin_out(self.pins['E'])
+        self._write_to_pin(self.pins['E'], False)
+
+        self._init_pin_in(self.pins['DB4'])
+        self._init_pin_in(self.pins['DB5'])
+        self._init_pin_in(self.pins['DB6'])
+        self._init_pin_in(self.pins['DB7'])
+
+        sleep_us(1)  # need 25ns to rise or down
+        self._write_to_pin(self.pins['E'], True)
+        sleep_us(1)  # Min 450ns time for high level of E pin to be detected
+        self._write_to_pin(self.pins['E'], False)
+
+        self._delay(delay_cycles)  # wait finish command
+
+        data = 0
+        data += self.pins["DB7"].value() << 7
+        data += self.pins["DB6"].value() << 6
+        data += self.pins["DB5"].value() << 5
+        data += self.pins["DB4"].value() << 4
+        data += self.pins["DB3"].value() << 3
+        data += self.pins["DB2"].value() << 2
+        data += self.pins["DB1"].value() << 1
+        data += self.pins["DB0"].value()
+
+        return data
 
 
-    def read_8bit(self, RS_level:int) -> int:
-        pass
+    def read(self, RS_level:int, delay_cycles:int = 10) -> int:
 
-    def read(self, RS_level:int) -> int:
-        pass
+        return self.read_8bit(RS_level, delay_cycles)
