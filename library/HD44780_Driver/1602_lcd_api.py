@@ -164,10 +164,12 @@ class lcd_api:
 
     def is_busy(self) -> bool:
         busy,add = self.driver.read_busy_flag_and_address()
+        busy,_ = self.driver.read_busy_flag_and_address()
         return busy
 
     def ram_counter(self) -> bool:
         busy, add = self.driver.read_busy_flag_and_address()
+        _, add = self.driver.read_busy_flag_and_address()
         return add
 
     def ram_data(self) -> int:
