@@ -121,7 +121,7 @@ class GPIO8_HAL(General_HAL):
                          DB5_level=1,
                          DB4_level=1,
                          DB3_level=0, DB2_level=0, DB1_level=0, DB0_level=0, #  DB0~DB3 are ignored
-                         delay_cycles=1)
+                         delay_cycles=10)
 
 
     def write_8bit(self, RS_level:int,
