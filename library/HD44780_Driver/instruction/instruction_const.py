@@ -1,5 +1,5 @@
 # Copyright (c) Gao Shibo. All rights reserved.
-# Licensed under The MIT License, see LICENSE in repo's root
+# Licensed under the MIT License, see LICENSE in repo's root
 
 from micropython import const
 

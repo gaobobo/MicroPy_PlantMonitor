@@ -1,5 +1,5 @@
 # Copyright (c) Gao Shibo. All rights reserved.
-# Licensed under The MIT License, see LICENSE in repo's root
+# Licensed under the MIT License, see LICENSE in repo's root
 
 from .instruction.instruction_const import *
 from .HAL.ABC_Gener_HAL import General_HAL
