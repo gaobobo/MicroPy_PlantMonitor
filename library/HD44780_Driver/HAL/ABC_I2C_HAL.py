@@ -12,7 +12,7 @@ from machine import I2C
 from time import sleep_us, sleep_ms
 
 
-class GPIO8_HAL(General_HAL):
+class I2C_HAL(General_HAL):
 
     def _delay(self, cycle:int):
         """
