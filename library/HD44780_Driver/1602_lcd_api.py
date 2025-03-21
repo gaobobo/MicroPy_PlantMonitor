@@ -169,6 +169,7 @@ class lcd_api:
 
     def ram_counter(self) -> bool:
         busy, add = self.driver.read_busy_flag_and_address()
+    def ram_counter(self) -> int:
         _, add = self.driver.read_busy_flag_and_address()
         return add
 
