@@ -138,7 +138,7 @@ class GPIO4_HAL(General_HAL):
                          delay_cycles=10)
 
     def write_4bit(self, RS_level:int, DB7_level:int, DB6_level:int, DB5_level:int, DB4_level:int,
-                   delay_cycles:int = 0):
+                   delay_cycles:int = 10):
         """
         **Write instructions to GPIO**
 
