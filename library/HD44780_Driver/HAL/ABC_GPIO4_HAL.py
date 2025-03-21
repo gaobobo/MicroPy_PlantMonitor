@@ -73,7 +73,8 @@ class GPIO4_HAL(General_HAL):
 
 
 
-    def __init__(self, RS, RW, E, DB4, DB5, DB6, DB7):
+    def __init__(self, RS:any, RW:any|None, E:any,
+                 DB4:any, DB5:any, DB6:any, DB7:any) -> None:
         """
         **Init class** Must be called using super().__init__()
 
