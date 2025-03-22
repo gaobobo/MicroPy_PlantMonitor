@@ -128,7 +128,47 @@ class GPIO8_HAL(General_HAL):
                    DB0_level:int, DB1_level:int, DB2_level:int, DB3_level:int,
                    DB4_level:int, DB5_level:int, DB6_level:int, DB7_level:int,
                    delay_cycles:int = 1):
-        pass
+        self._init_pin_out(self.pins['RS'])
+        self._write_to_pin(self.pins['RS'], bool(RS_level))
+
+        if self.pins['RW'] is not None:
+            self._init_pin_out(self.pins['RW'])
+            self._write_to_pin(self.pins['RW'], False)
+
+        self._init_pin_out(self.pins['E'])
+        self._write_to_pin(self.pins['E'], False)
+
+        self._init_pin_out(self.pins['DB0'])
+        self._write_to_pin(self.pins['DB0'], bool(DB0_level))
+
+        self._init_pin_out(self.pins['DB1'])
+        self._write_to_pin(self.pins['DB1'], bool(DB1_level))
+
+        self._init_pin_out(self.pins['DB2'])
+        self._write_to_pin(self.pins['DB2'], bool(DB2_level))
+
+        self._init_pin_out(self.pins['DB3'])
+        self._write_to_pin(self.pins['DB3'], bool(DB3_level))
+
+        self._init_pin_out(self.pins['DB4'])
+        self._write_to_pin(self.pins['DB4'], bool(DB4_level))
+
+        self._init_pin_out(self.pins['DB5'])
+        self._write_to_pin(self.pins['DB5'], bool(DB5_level))
+
+        self._init_pin_out(self.pins['DB6'])
+        self._write_to_pin(self.pins['DB6'], bool(DB6_level))
+
+        self._init_pin_out(self.pins['DB7'])
+        self._write_to_pin(self.pins['DB7'], bool(DB7_level))
+
+        sleep_us(1)    # need 25ns to rise or down
+        self._write_to_pin(self.pins['E'], True)
+        sleep_us(1)    # Min 450ns time for high level to be detected
+        self._write_to_pin(self.pins['E'], False)
+
+        self._delay(delay_cycles)   # wait finish command
+
 
     def write(self, RS_level: int, DBs_level: int, delay_cycles:int = 1):
 
