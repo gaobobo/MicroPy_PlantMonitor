@@ -60,8 +60,8 @@ class I2C_HAL(General_HAL):
         """
         **Write instructions to GPIO**
 
-        Most I2C Bus Controller only support 8bit, meaning RW is LOW or only support display char
-        in ROM. However, if your I2C Board supports RS and RW pins switch, override this func.
+        Most I2C Bus Controller only support 8bit, meaning RW is LOW or only support write, if your I2C
+        Board supports RW pins switch, override this func.
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
         :param DBs_level: RS pin level. 0 is LOW, otherwise is HIGH
         :param delay_cycles: Delay cycles
