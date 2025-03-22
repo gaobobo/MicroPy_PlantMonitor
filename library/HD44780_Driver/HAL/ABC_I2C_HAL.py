@@ -65,8 +65,6 @@ class I2C_HAL(General_HAL):
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
         :param DBs_level: RS pin level. 0 is LOW, otherwise is HIGH
         :param delay_cycles: Delay cycles
-        :param RS_level: Ignore by default
-        :return:
         """
 
         self.pins["I2C"].writeto(self.address, DBs_level)
