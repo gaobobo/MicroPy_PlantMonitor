@@ -43,17 +43,19 @@ class I2C_HAL(General_HAL):
         Inner reset circuit will work if the power conditions correctly,
         but if not that must reset manually by instructions.
         """
-        sleep_ms(40)    # wait for more than 40ms after Vcc to 2.7V
+        sleep_ms(40)  # wait more than 40ms after Vcc to 2.7V
 
-        self.write(DBs_level=0b00110000, delay_cycles=0)
+        self.write_4bit_i2c(RS_level=0, DBs_level=0b0011, delay_cycles=0)
 
-        sleep_ms(5)  # wait for more than 4.1ms
+        sleep_ms(5)  # wait more than 4.1ms
 
-        self.write(DBs_level=0b00110000, delay_cycles=0)
+        self.write_4bit_i2c(RS_level=0, DBs_level=0b0011, delay_cycles=0)
 
         sleep_us(100)  # wait more than 100μs
 
-        self.write(DBs_level=0b00110000, delay_cycles=10)
+        self.write_4bit_i2c(RS_level=0, DBs_level=0b0011, delay_cycles=10)
+
+        self.write_4bit_i2c(RS_level=0, DBs_level=0b0010, delay_cycles=10)
 
 
     def write_4bit_i2c(self, RS_level:int, DBs_level:int, delay_cycles:int = 10, BG_level:int = 1) -> None:
@@ -97,8 +99,8 @@ class I2C_HAL(General_HAL):
         :param delay_cycles: Delay cycles
         """
 
-        self.pins["I2C"].writeto(self.address, DBs_level)
-        self._delay(delay_cycles)
+        self.write_4bit_i2c(RS_level, DBs_level >> 4, 10)
+        self.write_4bit_i2c(RS_level, DBs_level & 0x0F, delay_cycles)
 
     def read(self, RS_level:int, delay_cycles:int = 10) -> int:
         """
