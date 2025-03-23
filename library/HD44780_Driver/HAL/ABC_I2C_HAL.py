@@ -135,7 +135,7 @@ class I2C_HAL(General_HAL):
 
         sleep_us(4) # need max 4μs to output from PCF8574
 
-        return self.pins["I2C"].readfrom(self.address, 1)
+        return (self.pins["I2C"].readfrom(self.address, 1)) >> 4
 
 
     def read(self, RS_level:int, delay_cycles:int = 10) -> int:
