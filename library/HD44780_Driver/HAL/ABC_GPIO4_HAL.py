@@ -256,7 +256,7 @@ class GPIO4_HAL(General_HAL):
         :param delay_cycles: Delay cycles
         """
         data = 0
-        data += self.read_4bit(RS_level) << 4
+        data += self.read_4bit(RS_level, 1) << 4
 
         data += self.read_4bit(RS_level, delay_cycles)
 
