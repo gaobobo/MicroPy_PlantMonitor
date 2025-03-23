@@ -180,13 +180,13 @@ class lcd_api:
         self._cursor_offset += 40 if self._cursor_offset < 40 else 0
         self.cursor_return()
 
-    def entry_mode_setting(self, is_from_to_right:bool, is_scroll_content:bool) -> None:
+    def entry_mode_setting(self, write_left_to_right:bool, is_scroll_content:bool) -> None:
         """
         **Set cursor and content behavior while typing**
-        :param is_from_to_right: True is move right after typing and False is left.
+        :param write_left_to_right: True is move right after typing and False is left.
         :param is_scroll_content: True is move content after typing and False is not.
         """
-        self.driver.entry_mode_set(is_from_to_right, is_scroll_content)
+        self.driver.entry_mode_set(write_left_to_right, is_scroll_content)
 
     def print_char(self, char:int) -> None:
         """
