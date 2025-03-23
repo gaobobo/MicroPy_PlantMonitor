@@ -102,6 +102,42 @@ class I2C_HAL(General_HAL):
         self.write_4bit_i2c(RS_level, DBs_level >> 4, 10)
         self.write_4bit_i2c(RS_level, DBs_level & 0x0F, delay_cycles)
 
+    def read_4bit_i2c(self, RS_level: int, delay_cycles: int = 10) -> int:
+        """
+        **Read 4bit data from DB4~DB7**
+
+        NOTE: Every I2C board may have difference of pin defined. Reference to factory's information.
+        This func is an example as PCF8574 which P4~P7 are DB4~DB7 of the 1602 LCD, P3 is backlight,
+        P2 is E Pin, P1 is RW Pin, P0 is RS Pin.
+        :param delay_cycles: Delay cycles
+        :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
+        :return: A 4bit int number read. From high bit DB7 to low bit DB4.
+        """
+
+        data = ( 1 << 3                         # 3 bit is Background light
+                 # | 0 << 2                     # 2 bit is E Pin
+                 | 1 << 1                       # 1 bit is RW Pin
+                 | 1 if RS_level else 0         # 0 bit is RS Pin
+                 # | 0x00                       # 7~4 bit is DB7, DB6, DB5, DB4
+                 )
+
+        self.pins["I2C"].writeto(self.address,
+                                 (data | 0x04).to_bytes(1)) # set E pin HIGH
+
+        # I2C Controller will block before finish process, meaning not to need sleep_us() to pulse E
+        # pin.
+        # sleep_us(1)
+
+        self.pins["I2C"].writeto(self.address,
+                                 data.to_bytes(1)) # set E pin LOW
+
+        self._delay(delay_cycles)
+
+        sleep_us(4) # need max 4μs to output from PCF8574
+
+        return self.pins["I2C"].readfrom(self.address, 1)
+
+
     def read(self, RS_level:int, delay_cycles:int = 10) -> int:
         """
         **Read data from DB pins**
