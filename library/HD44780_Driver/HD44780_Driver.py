@@ -33,10 +33,10 @@ class HD44780_Driver:
         :param display_shift: True is enabled scroll content(stay the cursor's position), false is disabled.
         """
         instruction = (LCD_ENTRY_MODE_
-                       + (LCD_ENTRY_MODE_CURSOR_INCREMENT
+                       | (LCD_ENTRY_MODE_CURSOR_INCREMENT
                            if cursor_increment
                            else LCD_ENTRY_MODE_CURSOR_DECREMENT)
-                       + (LCD_ENTRY_MODE_SHIFT if display_shift else 0)
+                       | (LCD_ENTRY_MODE_SHIFT if display_shift else 0)
                        )
 
         self.board.write(RS_level=0,
@@ -48,13 +48,13 @@ class HD44780_Driver:
         :param cursor_on: True is enabled cursor, false is disabled.
         :param cursor_blink: True is enabled blink for cursor, false is disabled."""
         instruction = (LCD_DISPLAY_
-                       + (LCD_DISPLAY_ON
+                       | (LCD_DISPLAY_ON
                           if display_on
                           else LCD_DISPLAY_OFF)
-                       + (LCD_DISPLAY_CURSOR_ON
+                       | (LCD_DISPLAY_CURSOR_ON
                           if cursor_on
                           else LCD_DISPLAY_CURSOR_OFF)
-                       + (LCD_DISPLAY_BLINK if cursor_blink else 0)
+                       | (LCD_DISPLAY_BLINK if cursor_blink else 0)
                        )
 
         self.board.write(RS_level=0,
@@ -65,10 +65,10 @@ class HD44780_Driver:
         :param move_cursor: True is move cursor, False is move display content.
         :param move_right: True is move right, False is left."""
         instruction = (LCD_SHIFT_
-                       + (LCD_SHIFT_CURSOR
+                       | (LCD_SHIFT_CURSOR
                           if move_cursor
                           else LCD_SHIFT_DISPLAY)
-                       + (LCD_SHIFT_RIGHT
+                       | (LCD_SHIFT_RIGHT
                           if move_right
                           else LCD_SHIFT_LEFT)
                        )
@@ -84,13 +84,13 @@ class HD44780_Driver:
         :param is_font_5x10dot: True is 5x10 dots font, False is 5x8 dots.
         """
         instruction = (LCD_FUNCTION_
-                       + (LCD_FUNCTION_8BIT
+                       | (LCD_FUNCTION_8BIT
                           if is_length_8bit
                           else LCD_FUNCTION_4BIT)
-                       + (LCD_FUNCTION_2LINE
+                       | (LCD_FUNCTION_2LINE
                           if is_display_2lines
                           else LCD_FUNCTION_1LINE)
-                       + (LCD_FUNCTION_5x10DOT
+                       | (LCD_FUNCTION_5x10DOT
                           if is_font_5x10dot
                           else LCD_FUNCTION_5x8DOT)
                        )
@@ -102,7 +102,7 @@ class HD44780_Driver:
         """Sets Address Counter to the Character Generator RAM address.
         :param address: address to set.
         """
-        instruction = SET_CGRAM_ADDRESS__ + address
+        instruction = SET_CGRAM_ADDRESS__ | address
         self.board.write(RS_level=0,
                          DBs_level= instruction)
 
@@ -111,7 +111,7 @@ class HD44780_Driver:
         **To set address counter SET_DDRAM_ADDRESS or SET_CGRAM_ADDRESS**
         :param address: address to set.
         """
-        instruction = SET_DDRAM_ADDRESS__ + address
+        instruction = SET_DDRAM_ADDRESS__ | address
         self.board.write(RS_level=0,
                          DBs_level= instruction)
 
