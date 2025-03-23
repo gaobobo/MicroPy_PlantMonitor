@@ -6,6 +6,7 @@
 
 Extend this class to use RS, RW, E, DB0 ~ DB7 to communicate with HD44780.
 """
+
 from machine import Pin
 from time import sleep_us, sleep_ms
 from .ABC_Gener_HAL import General_HAL
