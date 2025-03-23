@@ -14,7 +14,7 @@ from .HD44780_Driver import HD44780_Driver
 from framebuf import FrameBuffer
 
 # For Japanese HD44780, import below
-# from .char_sets.japanese import char_set
+from .char_sets.japanese import char_set
 
 # For European HD44780, import below
 # from .char_sets.european import char_set
@@ -264,7 +264,7 @@ class lcd_api:
         **Read HD44780's busy status**
         :return: True is busy and False is prepared to receive instruction.
         """
-        busy,_ = self.driver.read_busy_flag_and_address()
+        busy, _ = self.driver.read_busy_flag_and_address()
         return not busy
 
     def ram_counter(self) -> int:
