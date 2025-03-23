@@ -148,4 +148,9 @@ class I2C_HAL(General_HAL):
         :return: A 8bit int number read. From DB0 to DB7
         :param delay_cycles: Delay cycles
         """
-        raise RuntimeError("This I2C device only support write.")
+        data = 0
+        data += self.read_4bit_i2c(RS_level) << 4
+
+        data += self.read_4bit_i2c(RS_level, delay_cycles)
+
+        return data
