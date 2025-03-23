@@ -6,7 +6,6 @@
 
 Extend this class to use I2C to communicate with hardware.
 """
-from tkinter.constants import SEL_FIRST
 
 from .ABC_Gener_HAL import General_HAL
 from machine import I2C
