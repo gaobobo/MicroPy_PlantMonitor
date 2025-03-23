@@ -149,7 +149,7 @@ class I2C_HAL(General_HAL):
         :param delay_cycles: Delay cycles
         """
         data = 0
-        data += self.read_4bit_i2c(RS_level) << 4
+        data += self.read_4bit_i2c(RS_level, 1) << 4
 
         data += self.read_4bit_i2c(RS_level, delay_cycles)
 
