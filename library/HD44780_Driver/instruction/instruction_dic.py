@@ -1,6 +1,17 @@
 # Copyright (c) Gao Shibo. All rights reserved.
 # Licensed under the MIT License, see LICENSE in repo's root
 
+"""
+**A instruction list of HD44780**
+
+
+All instruction is pre-calculate and just use like
+
+    >>> HD44780_Instruction['LCD_ENTRY_MODE_CURSOR_INCREMENT']
+    0x06
+
+"""
+
 HD44780_Instruction = {
     'WriteToCmdReg': {
         """Write to IR or Instruction Register"""

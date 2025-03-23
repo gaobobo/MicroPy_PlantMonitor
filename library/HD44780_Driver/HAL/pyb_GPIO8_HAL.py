@@ -1,6 +1,12 @@
 # Copyright (c) Gao Shibo. All rights reserved.
 # Licensed under the MIT License, see LICENSE in repo's root
 
+"""
+**A HD44780 8pin example of pyboard**
+
+This HAL use pyb native lib like pyb.Pin.
+"""
+
 from pyb import Pin
 from .ABC_GPIO8_HAL import GPIO8_HAL
 

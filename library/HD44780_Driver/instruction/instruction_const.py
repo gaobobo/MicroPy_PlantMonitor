@@ -1,6 +1,17 @@
 # Copyright (c) Gao Shibo. All rights reserved.
 # Licensed under the MIT License, see LICENSE in repo's root
 
+"""
+**A instruction list of HD44780**
+
+
+Need us |(or) operation to get final instruction, like:
+
+    >>> LCD_ENTRY_MODE_ | LCD_ENTRY_MODE_CURSOR_INCREMENT
+    0x06
+
+"""
+
 from micropython import const
 
 LCD_CLEAR = const(0x01)
