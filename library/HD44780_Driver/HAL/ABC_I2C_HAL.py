@@ -56,7 +56,37 @@ class I2C_HAL(General_HAL):
         self.write(DBs_level=0b00110000, delay_cycles=10)
 
 
-    def write(self, DBs_level: int, delay_cycles:int = 10, RS_level: int = None):
+    def write_4bit_i2c(self, RS_level:int, DBs_level:int, delay_cycles:int = 10, BG_level:int = 1) -> None:
+        """
+        **Write instructions to GPIO**
+
+        :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
+        :param DBs_level: DB Pins level. From DB4~DB7.
+        :param delay_cycles: Delay cycles
+        :param BG_level: Background control. 0 is close and 1 is on.
+        """
+
+        data = ( (DBs_level & 0x0F) << 4        # 7~4 bit is DB7, DB6, DB5, DB4
+                 | (1 << 3) if BG_level else 0  # 3 bit is Background light
+                 # | 0 << 2                     # 2 bit is E Pin
+                 # | 0 << 1                     # 1 bit is RW Pin
+                 | 1 if RS_level else 0         # 0 bit is RS Pin
+                 )
+
+        self.pins["I2C"].writeto(self.address,
+                                 (data | 0x04).to_bytes(1)) # set E pin HIGH
+
+        # I2C Controller will block before finish process, meaning not to need sleep_us() to pulse E
+        # pin.
+        # sleep_us(1)
+
+        self.pins["I2C"].writeto(self.address,
+                                 data.to_bytes(1)) # set E pin LOW
+
+        self._delay(delay_cycles)
+
+
+    def write(self, RS_level: int, DBs_level: int, delay_cycles:int = 10 ):
         """
         **Write instructions to GPIO**
 
