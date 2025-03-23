@@ -41,11 +41,10 @@ class lcd_api:
 
     def __init__(self, board:General_HAL) -> None:
         """
-        **Init class**
+        **Constructor of Apis**
 
-        Init member and init display.
-        :param board: A General_HAL object. This should be a class that extend from the
-        ABC_*_HAL class. Example seE ./HAL/pyb_GPIO4_HAL.py.
+        :param board: A General_HAL object. This should be extended from the ABC_*_HAL class.
+        Example see ./HAL/pyb_GPIO4_HAL.py.
         """
         self.board = board
         self.board.init_manually()
@@ -62,7 +61,7 @@ class lcd_api:
         **Control display or off**
 
         NOTICE: This is NOT control background-light. Background-light is independently controlling
-        by other pins.
+        by other pins. If I2C board used, use ABC_I2C_HAL.write_4bit_i2c(**args, BG_level)
         :param is_on: Turn on display or off. True is on and False is off, None is switching between
          on and off.
         """
@@ -71,9 +70,9 @@ class lcd_api:
 
     def enable_cursor_or_disable(self, is_enable: bool|None=None) -> None:
         """
-        **Display cursor or not**
-        :param is_enable: Display or not display. True is display and False is not display. None is
-         switching between display and not display.
+        **Enable cursor or not**
+        :param is_enable: Enable cursor or disable. True is enabled and False is disabled. None is
+         switching between enable and not disable.
         """
         self._cursor_enable = not self._cursor_enable if is_enable is None else is_enable
         self.driver.display_control(self._display_on, self._cursor_enable, self._cursor_blink)
@@ -90,7 +89,7 @@ class lcd_api:
     def clear(self) -> None:
         """
         **Clear screen**
-        NOTICE: No need to move cursor to home.
+        NOTE: No need move cursor to home.
         """
         self.driver.clear_display()
         self._cursor_offset = 0
@@ -106,7 +105,7 @@ class lcd_api:
 
     def cursor_move_left(self) -> None:
         """
-        **Move cursor to left**
+        **Move cursor one char to the left**
         """
         self.driver.cursor_or_display_shift(True, False)
         self._cursor_offset -= 1 if self._cursor_offset >= 0 else 0
@@ -114,7 +113,7 @@ class lcd_api:
 
     def cursor_move_right(self, auto_return:bool = False) -> None:
         """
-        **Move cursor to right**
+        **Move cursor one char to the right**
         :param auto_return: If move next line when cursor to line end. The end is 16 chars and
         NOT 40 chars. True is enabled and False is disabled.
         """
@@ -125,7 +124,7 @@ class lcd_api:
 
     def content_move_left(self) -> None:
         """
-        **Move content cursor to left**
+        **Move content one char to the left**
         NOTICE: Move content will also move cursor's position. For example, move the cursor to home after
         moving content, the cursor won't move to the first char position and it'll offset with the content.
         """
@@ -134,7 +133,7 @@ class lcd_api:
 
     def content_move_right(self) -> None:
         """
-        **Move content cursor to right**
+        **Move content one char to the right**
         """
         self.driver.cursor_or_display_shift(False, True)
         self._display_offset += 1
@@ -165,25 +164,25 @@ class lcd_api:
 
     def cursor_move_up(self) -> None:
         """
-        **Move cursor up**
+        **Move cursor to last line**
         """
         self._cursor_offset -= 40 if self._cursor_offset > 40 else 0
         self.cursor_return()
 
     def cursor_move_down(self) -> None:
         """
-        **Move cursor down**
+        **Move cursor to next line**
         """
         self._cursor_offset += 40 if self._cursor_offset < 40 else 0
         self.cursor_return()
 
-    def entry_mode_setting(self, write_left_to_right:bool, is_scroll_content:bool) -> None:
+    def entry_mode_setting(self, cursor_increment:bool, is_scroll_content:bool) -> None:
         """
         **Set cursor and content behavior while typing**
-        :param write_left_to_right: True is move right after typing and False is left.
+        :param cursor_increment: True is move right after typing and False is left.
         :param is_scroll_content: True is move content after typing and False is not.
         """
-        self.driver.entry_mode_set(write_left_to_right, is_scroll_content)
+        self.driver.entry_mode_set(cursor_increment, is_scroll_content)
 
     def print_char(self, char:int) -> None:
         """
@@ -196,7 +195,7 @@ class lcd_api:
         """
         **Write custom char to ram**
         :param char: A 5*8 FrameBuffer object of custom char.
-        :param index: Index of ram position to write, only 8 custom chars supported. Start
+        :param index: Index to write to CGRAM, only 8 custom chars supported. Start
         from 0, Max is 7.
         """
         if index not in range(0, 8):

@@ -6,6 +6,7 @@
 
 Extend this class to use I2C to communicate with hardware.
 """
+from tkinter.constants import SEL_FIRST
 
 from .ABC_Gener_HAL import General_HAL
 from machine import I2C
@@ -14,34 +15,34 @@ from time import sleep_us, sleep_ms
 
 class I2C_HAL(General_HAL):
 
-    def _delay(self, cycle:int):
+    def _delay(self, cycle:int) -> None:
         """
         **Delay time by cycle**
 
-        The HD44780U's typical frequency is 270kHz, means about 3.7 microseconds per clock cycle.
-        However, the frequency maybe from 190kHZ to 350kHz. Override this function to fit your
-        actual frequency if needed.
+        The HD44780U's typical frequency is 270kHz means about 3.7 microseconds per clock cycle.
+        However, the frequency maybe from 190kHZ to 350kHz. Override this function to fit actual frequency.
         :param cycle: Delay cycles
         """
 
         sleep_us(4 * cycle)
 
     pins:dict[str, any] = None
-    """**I2C object**{"I2C": I2CObject}"""
+    """**I2C object in a dictionary**{"I2C": I2CObject}"""
 
     address:int = None
 
     def __init__(self, i2c:I2C, address:int) -> None:
         self.pins = {"I2C": i2c}
         self.address = address
+        self.pins['I2C'].writeto(self.address, (0x00).to_bytes(1))
 
 
-    def init_manually(self):
+    def init_manually(self) -> None:
         """
-        **Initialization by instructions in 8pins**
+        **Initialization HD44780 in 4pin mode**
 
-        Inner reset circuit will work if the power conditions correctly,
-        but if not that must reset manually by instructions.
+        Inner reset circuit will work if the power conditions correctly, if not sure that always init manually
+        before run.
         """
         sleep_ms(40)  # wait more than 40ms after Vcc to 2.7V
 
@@ -62,10 +63,13 @@ class I2C_HAL(General_HAL):
         """
         **Write instructions to GPIO**
 
+        NOTE: Every I2C board may have difference of pin defined. Reference to factory's information.
+        This func is an example as PCF8574 which P4~P7 are DB4~DB7 of the 1602 LCD, P3 is backlight,
+        P2 is E Pin, P1 is RW Pin, P0 is RS Pin.
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :param DBs_level: DB Pins level. From DB4~DB7.
+        :param DBs_level: DB Pins level. From high bit DB7 to low bit DB0.
         :param delay_cycles: Delay cycles
-        :param BG_level: Background control. 0 is close and 1 is on.
+        :param BG_level: Background control. 0 is close, otherwise is on
         """
 
         data = ( (DBs_level & 0x0F) << 4        # 7~4 bit is DB7, DB6, DB5, DB4
@@ -90,12 +94,11 @@ class I2C_HAL(General_HAL):
 
     def write(self, RS_level: int, DBs_level: int, delay_cycles:int = 10 ):
         """
-        **Write instructions to GPIO**
+        **Write instructions to I2C**
 
-        Most I2C Bus Controller only support 8bit, meaning RW is LOW or only support write, if your I2C
-        Board supports RW pins switch, override this func.
+        NOTE: Send 8bit although only 4 bit. To send only once or 4bit, use self.write_4bit_i2c().
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :param DBs_level: RS pin level. 0 is LOW, otherwise is HIGH
+        :param DBs_level: A 8bit int number composed of DB pins' level, from high bit DB7 to low bit DB0.
         :param delay_cycles: Delay cycles
         """
 
@@ -142,10 +145,9 @@ class I2C_HAL(General_HAL):
         """
         **Read data from DB pins**
 
-        Most I2C Bus Controller only support 8bit, meaning RW is LOW or only support write, if your I2C
-        Board supports RW pins switch, override this func.
+        NOTE: Read 8bit although only 4 pins. To read only once or 4bit, use self.read_4bit().
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :return: A 8bit int number read. From DB0 to DB7
+        :return: A 8bit int number read. From high bit DB7 to low bit DB0
         :param delay_cycles: Delay cycles
         """
         data = 0

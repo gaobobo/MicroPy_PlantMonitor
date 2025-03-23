@@ -4,7 +4,7 @@
 """
 **Base class of HAL**
 
-Should extend from ABC_GPIO4_HAL, ABC_GPIO8_HAL and ABC_I2C_HAL, unless need another protocol.
+Should extend from ABC_GPIO4_HAL, ABC_GPIO8_HAL and ABC_I2C_HAL, unless need another bus protocol.
 """
 
 class General_HAL :

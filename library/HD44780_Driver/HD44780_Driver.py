@@ -10,26 +10,28 @@ class HD44780_Driver:
 
     def __init__(self, board:General_HAL) -> None:
         """
-        :param board: A HAL extend object from General_HAL object.
+        **Constructor of Driver**
+
+        :param board: A HAL extend object from HAL object.
         """
         self.board = board
 
 
     def clear_display(self) -> None:
-        """Clear Display Data RAM and set Address Counter to 0."""
+        """Clear Display Data RAM and set the address counter to 0."""
         self.board.write(RS_level=0,
                          DBs_level=LCD_CLEAR,
                          delay_cycles=420)   # need 1.52ms in typical frequency
 
     def return_home(self) -> None:
-        """set Address Counter to 0."""
+        """set the address counter to 0."""
         self.board.write(RS_level=0,
                          DBs_level=LCD_TO_HOME,
                          delay_cycles=420)    # need 1.52ms in typical frequency
 
     def entry_mode_set(self, cursor_increment:bool = True, display_shift:bool = False) -> None:
         """Control action when read or write.
-        :param cursor_increment: True is move cursor from left to right when read or write, false is not move.
+        :param cursor_increment: True is move cursor right when write or left when read, False is on the contrary.
         :param display_shift: True is enabled scroll content(stay the cursor's position), false is disabled.
         """
         instruction = (LCD_ENTRY_MODE_
@@ -43,7 +45,7 @@ class HD44780_Driver:
                          DBs_level= instruction)
 
     def display_control(self, display_on:bool=True, cursor_on=True, cursor_blink:bool=True) -> None:
-        """Control display on or off and cursor display.
+        """Turn display on or off and cursor is enabled or disabled.
         :param display_on: True is turn on the display, false is off.
         :param cursor_on: True is enabled cursor, false is disabled.
         :param cursor_blink: True is enabled blink for cursor, false is disabled."""
@@ -99,7 +101,7 @@ class HD44780_Driver:
                          DBs_level= instruction)
 
     def set_cg_ram(self, address: int) -> None:
-        """Sets Address Counter to the Character Generator RAM address.
+        """Sets the address counter to the CGRAM address.
         :param address: address to set.
         """
         instruction = SET_CGRAM_ADDRESS__ | address
@@ -108,7 +110,7 @@ class HD44780_Driver:
 
     def set_dd_ram(self, address: int) -> None:
         """
-        **To set address counter SET_DDRAM_ADDRESS or SET_CGRAM_ADDRESS**
+        **Set the address counter**
         :param address: address to set.
         """
         instruction = SET_DDRAM_ADDRESS__ | address
@@ -119,8 +121,8 @@ class HD44780_Driver:
         """
         **Get busy-flag and address counter**
         :return: (busy_flag, address), busy_flag is True means inner operating now and False is
-        ready to accept instruction. address is current Address Counter, which is read depending on
-        last SET_CGRAM_ADDRESS or SET_DDRAM_ADDRESS ran.
+        ready to accept instruction. address is current the address counter, which is read depending on
+        last SET_CGRAM_ADDRESS or SET_DDRAM_ADDRESS running.
         """
         data = self.board.read(RS_level=0, delay_cycles=0)
         busy_flag = bool(data & 0x80)
@@ -129,14 +131,14 @@ class HD44780_Driver:
 
     def write_data_to_ram(self, data: int) -> None:
         """
-        ** Write to CGRAM or DDRAM. **  Write to witch register is depend on witch Register Address last
-        set in WriteToCommandRegister.
+        **Write to CGRAM or DDRAM**  Write to witch register is depend on the register address last set in
+        set_cg_ram or set_dd_ram.
         :param data: data to write.
         """
         self.board.write(RS_level=1, DBs_level=data, delay_cycles=11)    # need more 4μs to update address counter
 
     def read_data_from_ram(self) -> int:
-        """**Read data from CGRAM or DDRAM.** Read witch register is depend on witch Register Address last
-        set in WriteToCommandRegister.
+        """**Read data from CGRAM or DDRAM.** Read to witch register is depend on the register address last set in
+        set_cg_ram or set_dd_ram.
         :return: data read"""
         return self.board.read(RS_level=1, delay_cycles=11) # need more 4μs to update address counter

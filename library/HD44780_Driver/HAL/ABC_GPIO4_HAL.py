@@ -4,7 +4,7 @@
 """
 **HAL of GPIO4**
 
-Extend this class to use RS, RW, E, DB4, DB5, DB6, DB7 to communicate with hardware.
+Extend this class to use RS, RW, E, DB4, DB5, DB6, DB7 pins to communicate with HD44780.
 """
 
 from machine import Pin
@@ -13,32 +13,29 @@ from .ABC_Gener_HAL import General_HAL
 
 class GPIO4_HAL(General_HAL):
 
-    def _init_pin_in(self, pin:Pin):
+    def _init_pin_in(self, pin:Pin) -> None:
         """
         **Init pin to INPUT mode**
 
-        This function used machine.Pin lib, and you could use super()._init_pin_in() to call.
-        For specific lib like pyb.Pin, you must achieve yourself.
+        This function used machine.Pin lib. For specific lib like pyb.Pin, override this function.
         :param pin: pin to initialize
         """
         pin.init(mode=Pin.IN)
 
-    def _init_pin_out(self, pin:Pin):
+    def _init_pin_out(self, pin:Pin) -> None:
         """
         **Init pin to OUTPUT mode**
 
-        This function used machine.Pin lib, and you could use super()._init_pin_in() to call.
-        For specific lib like pyb.Pin, you must achieve yourself.
+        This function used machine.Pin lib. For specific lib like pyb.Pin, override this function.
         :param pin: pin to initialize
         """
         pin.init(mode=Pin.OUT)
 
-    def _write_to_pin(self, pin:Pin, is_high:bool):
+    def _write_to_pin(self, pin:Pin, is_high:bool) -> None:
         """
         **Set pin to high or low in OUTPUT mode**
 
-        This function used machine.Pin lib, and you could use super()._init_pin_in() to call.
-        For specific lib like pyb.Pin, you must achieve yourself.
+        This function used machine.Pin lib. For specific lib like pyb.Pin, override this function.
         :param pin: pin to set
         :param is_high: false is LOW, true is HIGH
         """
@@ -48,8 +45,7 @@ class GPIO4_HAL(General_HAL):
         """
         **Read level from pin in INPUT mode**
 
-        This function used machine.Pin lib, and you could use super()._init_pin_in() to call.
-        For specific lib like pyb.Pin, you must achieve yourself.
+        This function used machine.Pin lib. For specific lib like pyb.Pin, override this function.
         :param pin: pin to read
         :return: pin's value
         """
@@ -59,31 +55,30 @@ class GPIO4_HAL(General_HAL):
         """
         **Delay time by cycle**
 
-        The HD44780U's typical frequency is 270kHz, means about 3.7 microseconds per clock cycle.
-        However, the frequency maybe from 190kHZ to 350kHz. Override this function to fit your
-        actual frequency if needed.
+        The HD44780U's typical frequency is 270kHz means about 3.7 microseconds per clock cycle.
+        However, the frequency maybe from 190kHZ to 350kHz. Override this function to fit actual frequency.
         :param cycle: Delay cycles
         """
 
         sleep_us(4 * cycle)
 
     pins:dict[str, any] = None
-    """**Pins from RS, RW, E and DB4~DB7** {PinName: PinObject}"""
+    """**A dictionary of RS, RW, E and DB4~DB7** {PinName: PinObject}"""
 
 
 
     def __init__(self, RS, RW, E,
                  DB4, DB5, DB6, DB7) -> None:
         """
-        **Init class** Must be called using super().__init__()
+        **Constructor of HAL**
 
         :param RS: Register select pin
         :param RW: Read or write pin. None is GND. If only write, this pin is optional and set it to None.
-        :param E: Enable pin mode
-        :param DB4: Data trans pin in 4bit and 8bit
-        :param DB5: Data trans pin in 4bit and 8bit
-        :param DB6: Data trans pin in 4bit and 8bit
-        :param DB7: Data trans pin in 4bit and 8bit
+        :param E: Enable pin
+        :param DB4: Data trans pin in 4bit and 8bit mode
+        :param DB5: Data trans pin in 4bit and 8bit mode
+        :param DB6: Data trans pin in 4bit and 8bit mode
+        :param DB7: Data trans pin in 4bit and 8bit mode
         """
         self.pins = {
             'RS': RS,
@@ -97,10 +92,10 @@ class GPIO4_HAL(General_HAL):
 
     def init_manually(self) -> None:
         """
-        **Initialization by instructions in 4pins**
+        **Initialization HD44780 in 4pin mode**
 
-        Inner reset circuit will work if the power conditions correctly,
-        but if not that must reset manually by instructions.
+        Inner reset circuit will work if the power conditions correctly, if not sure that always init manually
+        before run.
         """
         sleep_ms(40)  # wait more than 40ms after Vcc to 2.7V
 
@@ -141,12 +136,12 @@ class GPIO4_HAL(General_HAL):
         """
         **Write instructions to GPIO**
 
-        :param delay_cycles: Delay cycles
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
         :param DB7_level: DB7 pin level. 0 is LOW, otherwise is HIGH
         :param DB6_level: DB6 pin level. 0 is LOW, otherwise is HIGH
         :param DB5_level: DB5 pin level. 0 is LOW, otherwise is HIGH
         :param DB4_level: DB4 pin level. 0 is LOW, otherwise is HIGH
+        :param delay_cycles: Delay cycles
         """
 
         self._init_pin_out(self.pins['RS'])
@@ -183,9 +178,9 @@ class GPIO4_HAL(General_HAL):
         """
         **Write instructions to GPIO**
 
-        Send twice although only 4 bit. To send only once, use self.write_4bit().
+        NOTE: Send 8bit although only 4 bit. To send only once or 4bit, use self.write_4bit().
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :param DBs_level: A 8bit int number composed of DB pins' level, from low bit DB0 to high bit DB7.
+        :param DBs_level: A 8bit int number composed of DB pins' level, from high bit DB7 to low bit DB0.
         :param delay_cycles: Delay cycles
         """
 
@@ -211,7 +206,7 @@ class GPIO4_HAL(General_HAL):
 
         :param delay_cycles: Delay cycles
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :return: A 4bit int number read. From DB4 to DB7.
+        :return: A 4bit int number read. From high bit DB7 to low bit DB4.
         """
 
         if self.pins['RW'] is None: raise RuntimeError('RW pin is None but try to read.')
@@ -250,9 +245,9 @@ class GPIO4_HAL(General_HAL):
         """
         **Read data from DB pins**
 
-        Read twice although only 4 pins. To read only once, use self.read_4bit().
+        NOTE: Read 8bit although only 4 pins. To read only once or 4bit, use self.read_4bit().
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
-        :return: A 8bit int number read. From DB0 to DB7
+        :return: A 8bit int number read. From high bit DB7 to low bit DB0
         :param delay_cycles: Delay cycles
         """
         data = 0
