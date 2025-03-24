@@ -14,6 +14,7 @@ from time import sleep_us, sleep_ms
 
 class I2C_HAL(General_HAL):
 
+    # @abstractmethod
     def _delay(self, cycle:int) -> None:
         """
         **Delay time by cycle**
