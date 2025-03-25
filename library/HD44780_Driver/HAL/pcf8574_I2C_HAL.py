@@ -11,7 +11,7 @@ P2 is E Pin, P1 is RW Pin, P0 is RS Pin.
 from machine import I2C
 from .ABC_I2C_HAL import I2C_HAL
 
-class pyb_I2C_HAL(I2C_HAL):
+class pcf8574_I2C_HAL(I2C_HAL):
 
     def _delay(self, cycle: int):
         super()._delay(cycle)
