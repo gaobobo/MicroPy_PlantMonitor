@@ -72,11 +72,11 @@ class I2C_HAL(General_HAL):
         :param BG_level: Background control. 0 is close, otherwise is on
         """
 
-        data = ( (DBs_level & 0x0F) << 4        # 7~4 bit is DB7, DB6, DB5, DB4
-                 | (1 << 3) if BG_level else 0  # 3 bit is Background light
-                 # | 0 << 2                     # 2 bit is E Pin
-                 # | 0 << 1                     # 1 bit is RW Pin
-                 | 1 if RS_level else 0         # 0 bit is RS Pin
+        data = ( ((DBs_level & 0x0F) << 4)        # 7~4 bit is DB7, DB6, DB5, DB4
+                 | ((1 << 3) if BG_level else 0)  # 3 bit is Background light
+                 # | (0 << 2)                     # 2 bit is E Pin
+                 # | (0 << 1)                     # 1 bit is RW Pin
+                 | (1 if RS_level else 0)         # 0 bit is RS Pin
                  )
 
         self.pins["I2C"].writeto(self.address,
