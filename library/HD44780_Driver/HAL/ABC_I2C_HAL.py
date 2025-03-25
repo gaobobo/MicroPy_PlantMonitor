@@ -34,7 +34,7 @@ class I2C_HAL(General_HAL):
     def __init__(self, i2c:I2C, address:int) -> None:
         self.pins = {"I2C": i2c}
         self.address = address
-        self.pins['I2C'].writeto(self.address, (0x00).to_bytes(1))
+        self.pins['I2C'].writeto(self.address, (0x08).to_bytes(1))
 
 
     def init_manually(self) -> None:
