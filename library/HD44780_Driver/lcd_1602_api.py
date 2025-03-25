@@ -53,8 +53,12 @@ class lcd_api:
         self.driver.function_set(is_length_8bit= len(self.board.pins) == 11,   # use 8 bit
                                  is_display_2lines=True,
                                  is_font_5x10dot=False)
-        self.driver.display_control(self._display_on, self._cursor_enable, self._cursor_blink)
+        self.turn_on_display_or_off(False)
         self.driver.clear_display()
+        self.entry_mode_setting(True, False)
+        self.driver.display_control(self._display_on, self._cursor_enable, self._cursor_blink)
+        self.turn_on_display_or_off(True)
+
 
     def turn_on_display_or_off(self, is_on: bool|None=None) -> None:
         """
