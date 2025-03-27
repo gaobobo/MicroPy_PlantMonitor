@@ -83,14 +83,8 @@ class BMP180Driver:
     def get_temperature(self):
         UT = self._read_uncompensated_temp()
 
-        # X1 = (UT - self._AC6) * self._AC5 / pow(2, 15)
         X1 = ((UT - self._AC6) * self._AC5) >> 15
-
-        # X2 = self._MC * pow(2, 11) / (X1 + self._MD)
         X2 = (self._MC << 11) // (X1 + self._MD)
-
-        # B5 = X1 + X2
-        # T = (B5 + 8) / pow(2, 4)
 
         T = (X1 + X2 + 8) >> 4
 
@@ -104,27 +98,17 @@ class BMP180Driver:
         # calculate B6
         X1 = ((UT - self._AC6) * self._AC5) >> 15
         X2 = (self._MC << 11) // (X1 + self._MD)
-        # B5 = X1 + X2
-        # B6 = B5 - 4000
         B6 = X1 + X2 - 4000
 
         # calculate B3
-        # X1 = (self._B2 * (B6 * B6 / pow(2, 12)) / pow(2, 16)
         X1 = (self._B2 * (B6 * B6) >> 12) >> 11
-        # X2 = self._AC2 * B6 / pow(2, 11)
         X2 = (self._AC2 * B6) >> 11
-        # X3 = X1 + X2
-        # B3 = (((self._AC1 * 4 + X3) << oversampling_mode) + 2) / pow(2, 15)
         B3 = ( ((self._AC1 * 4 + X1 + X2) << oversampling_mode) + 2 ) >> 2
 
         # calculate B7
-        # X1 = self._AC3 * B6 / pow(2, 13)
         X1 = (self._AC3 * B6) >> 13
-        # X2 = (self._B1 * (B6 * B6 / pow(2, 12))) / pow(2, 16)
         X2 = ( self._B1 * ((B6 * B6) >> 12) ) >> 16
-        # X3 = ( (X1 + X2) + 2 ) / pow(2, 2)
         X3 = ( (X1 + X2) + 2 ) >> 2
-        # B4 = self._AC4 * (X3 + 32768) / pow(2, 15)
         B4 = ( self._AC4 * (X3 + 32768) ) >> 15
         B7 = (UP - B3) * (50000 >> oversampling_mode)
 
@@ -132,13 +116,9 @@ class BMP180Driver:
         if B7 < 0x80000000: p = (B7 << 1) // B4
         else: p = (B7 // B4) << 1
 
-        # X1 = (p / pow(2, 8)) * (p / pow(2, 8))
-        # X1 = (X1 * 3038) / pow(2, 16)
         X1 = ( (p >> 8) * (p >> 8) * 3038 ) >> 16
-        # X2 = (-7357 * p) / pow(2, 16)
         X2 = (-7357 * p) >> 16
 
-        # p = p + (X1 + X2 + 3791) / pow(2, 4)
         return ( p + (X1 + X2 + 3791) ) >> 4
 
 
