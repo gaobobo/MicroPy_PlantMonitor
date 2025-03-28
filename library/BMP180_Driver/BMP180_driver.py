@@ -83,11 +83,10 @@ class BMP180Driver:
     def get_temperature(self):
         UT = self._read_uncompensated_temp()
 
+
         X1 = ((UT - self._AC6) * self._AC5) >> 15
         X2 = (self._MC << 11) // (X1 + self._MD)
-
         T = (X1 + X2 + 8) >> 4
-
         return T / 10
 
 
@@ -118,7 +117,6 @@ class BMP180Driver:
 
         X1 = ( (p >> 8) * (p >> 8) * 3038 ) >> 16
         X2 = (-7357 * p) >> 16
-
         return ( p + (X1 + X2 + 3791) ) >> 4
 
 
