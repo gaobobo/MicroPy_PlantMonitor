@@ -214,7 +214,7 @@ class GPIO4_HAL(General_HAL):
         :return: A 4bit int number read. From high bit DB7 to low bit DB4.
         """
 
-        if self.pins['RW'] is None: raise RuntimeError('RW pin is None but try to read.')
+        if self.pins['RW'] is None: raise TypeError('RW pin is None but try to read.')
 
         self._init_pin_out(self.pins['RS'])
         self._write_to_pin(self.pins['RS'], bool(RS_level))
