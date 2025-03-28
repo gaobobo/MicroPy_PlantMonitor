@@ -149,9 +149,9 @@ class lcd_api:
         :param col: Move to which column. Strat from 0. Max is 39.
         """
         if row not in [0, 1] :
-            raise RuntimeError("Row must is 0 or 1.")
+            raise IndexError("Row must is 0 or 1.")
         elif col >= 40:
-            raise RuntimeError("every line max 39 chars. First one is 0.")
+            raise IndexError("every line max 39 chars. First one is 0.")
         else:
             address = 0x40 * row + col
 
