@@ -233,7 +233,7 @@ class GPIO8_HAL(General_HAL):
         :return: A 8bit int number read. From high bit DB7 to low bit DB0
         """
 
-        if self.pins['RW'] is None: raise RuntimeError('RW pin is None but try to read.')
+        if self.pins['RW'] is None: raise TypeError('RW pin is None but try to read.')
 
         self._init_pin_out(self.pins['RS'])
         self._write_to_pin(self.pins['RS'], bool(RS_level))
