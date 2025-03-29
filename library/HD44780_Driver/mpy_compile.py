@@ -58,12 +58,12 @@ def merge_files(file_path:list[str], output_path:str) -> None:
 
 
 def main():
-    source = Path(args.source)
-    output = Path(args.output)
+    source = Path(os.path.join(os.getcwd(), args.source))
+    output = Path(os.path.join(os.getcwd(), args.output))
 
     if source.is_dir(): RuntimeError("Source path is a directory")
     if output.is_dir():
-        output = Path(args.output + source.name)
+        output = Path(os.path.join(str(output), source.name))
 
     output.mkdir(parents=True, exist_ok=True)
 
@@ -73,6 +73,6 @@ def main():
 
     mpy_cross.run("-s", str(output), "-o", str(output.with_suffix('.mpy')))
 
-    
+
 if __name__ == "__main__":
     main()
