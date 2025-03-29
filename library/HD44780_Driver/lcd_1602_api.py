@@ -9,8 +9,7 @@ need to achieve your own board's Hardware Abstract Layer in ./HAL,
 for example see ./HAL/pyb_GPIO4_HAL.py.
 """
 
-from .HAL.ABC_Gener_HAL import General_HAL
-from .HD44780_Driver import HD44780_Driver
+from .HD44780_Driver import HD44780_Driver, General_HAL
 from framebuf import FrameBuffer
 
 # For only ASCII chars, declare char_set as empty dict
