@@ -1,56 +1,73 @@
 import argparse
 import re
 import os
+from pathlib import Path
+import mpy_cross
 
 parser = argparse.ArgumentParser()
 
-parser.description = "Compile the HD44780 driver for a specific board and interface."
-parser.add_argument("-b" ,"--board",
-                    description="The board to compile for. This will search <board>_<interface>_HAL"
-                                " file in ./HAL",)
-parser.add_argument("-i", "--interface",
-                    description="The interface to compile for. This will search <board>_<interface>_HAL"
-                                " file in ./HAL",)
-parser.add_argument("-a", "--architecture",
-                    description="The architecture to compile for.")
+parser.description = "merge file to single .py and compiled .mpy file."
+parser.add_argument("-s", "--source",
+                    help="source file path.",
+                    default=os.getcwd())
 parser.add_argument("-o", "--output",
-                    describption="Output path. Default is ./mpy/",
-                    default="./mpy/")
+                    help="Output file path. Default is ./build/<source_file_name>.py",
+                    default="./build/")
 
-relative_import_pattern = re.compile(r'(?<=\sfrom\s)\.\S+(?=\simport\s)|(?<=\simport\s)\.\S+')
-visited_files = []
+args = parser.parse_args()
 
-def remove_relative_imports(file_path, output_path):
-    with open(file_path, 'r') as source_file:
-        source_file_lines = source_file.readlines()
+relative_import_pattern = re.compile(r'(?<=from\s)\.\S+(?=\simport\s)|(?<=import\s)\.\S+')
 
-    with open(output_path, 'w') as output_file:
-        for source_line in source_file_lines:
+def resolve_dependence(source_file: Path) -> dict[str, dict|None]:
+    dependence_tree = {}
 
-            # check if the line is a docstring or comment or does not contain a relative import
-            if ( source_line.startswith('"""')     # ignore docstring
-                or source_line.startswith('#')     # ignore comment
-                or not relative_import_pattern.match(source_line) ):
+    with open(source_file, "r") as file:
+        for line in file.readlines():
+            line = line.strip()
+            if line.startswith('"""') or line.startswith('#'): continue
 
-                output_file.write(source_line)
-                continue
+            matches = relative_import_pattern.search(line)
+            if matches is None: continue
 
-            # Check if the file has already been visited
-            if file_path in visited_files:
-                print(f"Skipped {file_path} as it has already been visited.")
-                continue
+            called_lib_path = Path(source_file.parent, "." + matches.group(0).replace('.', '/') + ".py")
+            dependence_tree[str(called_lib_path)] = None if len(d:=resolve_dependence(called_lib_path)) == 0 else d
 
-            visited_files.append(file_path)
-            lib_path = relative_import_pattern.search(source_line)
+    return dependence_tree
 
-            # If not relative import is found, ignore it
-            if lib_path is None:
-                output_file.write(source_line)
-                print(f"Skipped {file_path} as it not relative.")
-                continue
 
-            with open(os.path.join(file_path, lib_path.group()), 'r') as lib_file:
-                output_file.write(f"# ============== from {lib_path.group()} ==============")
-                output_file.write(lib_file.read())
-                output_file.write(f"# =====================================================")
-                print(f"Removed relative import from {file_path}: {source_line}")
+def get_file_insert_order(dependence_tree: dict[str, dict|None]) -> list[str]|None:
+    for key, value in dependence_tree.items():
+        if value is None: return [key]
+        else: return get_file_insert_order(value) + [key]
+
+def merge_files(file_path:list[str], output_path:str) -> None:
+    with open(output_path, "w") as output_file:
+        for path in file_path:
+            with open(path, "r") as file:
+                output_file.write(f"# ==== {path} ====\r")
+
+                for line in file.readlines():
+                    line = line.strip()
+                    if (line.startswith('"""')
+                            or line.startswith('#')
+                            or relative_import_pattern.search(line) is None): continue
+                    output_file.write(line)
+
+                output_file.write("# ===================================\r\r")
+
+
+def main():
+    source = Path(args.source)
+    output = Path(args.output)
+
+    if source.is_dir(): RuntimeError("Source path is a directory")
+    if output.is_dir():
+        output = Path(args.output + source.name)
+
+    output.mkdir(parents=True, exist_ok=True)
+
+    dependence_tree = {str(source): resolve_dependence(source)}
+    merge_files_order = get_file_insert_order(dependence_tree) + [str(source)]
+    merge_files(merge_files_order, str(output))
+
+    mpy_cross.run("-s", str(output), "-o", str(output.with_suffix('.mpy')))
