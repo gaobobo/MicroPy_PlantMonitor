@@ -48,10 +48,7 @@ def merge_files(file_path:list[str], output_path:str) -> None:
                 output_file.write(f"# ==== {path} ====\r")
 
                 for line in file.readlines():
-                    line = line.strip()
-                    if (line.startswith('"""')
-                            or line.startswith('#')
-                            or relative_import_pattern.search(line) is None): continue
+                    if relative_import_pattern.search(line) is not None: continue
                     output_file.write(line)
 
                 output_file.write("# ===================================\r\r")
