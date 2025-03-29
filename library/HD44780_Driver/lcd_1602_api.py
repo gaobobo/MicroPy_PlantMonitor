@@ -13,8 +13,11 @@ from .HAL.ABC_Gener_HAL import General_HAL
 from .HD44780_Driver import HD44780_Driver
 from framebuf import FrameBuffer
 
+# For only ASCII chars, declare char_set as empty dict
+char_set = {}
+
 # For Japanese HD44780, import below
-from .char_sets.japanese import char_set
+# from .char_sets.japanese import char_set
 
 # For European HD44780, import below
 # from .char_sets.european import char_set
