@@ -51,7 +51,7 @@ def merge_files(file_path:list[str], output_path:str) -> None:
                     if relative_import_pattern.search(line) is not None: continue
                     output_file.write(line)
 
-                output_file.write("# ===================================\r\r")
+                output_file.write("\r# ===================================\r\r")
 
 
 def main():
