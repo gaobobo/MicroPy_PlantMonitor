@@ -72,3 +72,7 @@ def main():
     merge_files(merge_files_order, str(output))
 
     mpy_cross.run("-s", str(output), "-o", str(output.with_suffix('.mpy')))
+
+    
+if __name__ == "__main__":
+    main()
