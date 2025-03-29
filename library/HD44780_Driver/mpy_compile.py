@@ -42,8 +42,13 @@ def get_file_insert_order(dependence_tree: dict[str, dict|None]) -> list[str]|No
         
 
 def merge_files(file_path:list[str], output_path:str) -> None:
+    visited_files = {}
     with open(output_path, "w") as output_file:
         for path in file_path:
+
+            if path in visited_files: continue
+            visited_files[path] = None
+
             with open(path, "r") as file:
                 output_file.write(f"# ==== {path} ====\r")
 
