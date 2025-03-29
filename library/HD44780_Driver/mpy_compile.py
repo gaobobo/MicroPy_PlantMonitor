@@ -11,8 +11,8 @@ parser.add_argument("-s", "--source",
                     help="source file path.",
                     default=os.getcwd())
 parser.add_argument("-o", "--output",
-                    help="Output file path. Default is ./build/<source_file_name>.py",
-                    default="./build/")
+                    help="Output file path. Default is ./build/output.py",
+                    default="./build/output.py")
 
 args = parser.parse_args()
 
@@ -65,7 +65,8 @@ def main():
     if output.is_dir():
         output = Path(os.path.join(str(output), source.name))
 
-    output.mkdir(parents=True, exist_ok=True)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.touch(exist_ok=True)
 
     dependence_tree = {str(source): resolve_dependence(source)}
     merge_files_order = get_file_insert_order(dependence_tree) + [str(source)]
