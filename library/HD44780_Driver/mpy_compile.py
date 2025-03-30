@@ -13,6 +13,10 @@ parser.add_argument("-s", "--source",
 parser.add_argument("-o", "--output",
                     help="Output file path. Default is ./build/output.py",
                     default="./build/output.py")
+parser.add_argument("--opt",
+                    help="Set optimistic mode. As same as mpy-cross -O[N]. Default is 3.",
+                    default="3",
+                    choices=[0, 1, 2, 3])
 
 args = parser.parse_args()
 
@@ -80,7 +84,7 @@ def main():
     merge_files_order = get_file_insert_order(dependence_tree) + [str(source)]
     merge_files(merge_files_order, str(output))
 
-    mpy_cross.run("-o", str(output.with_suffix('.mpy')), str(output))
+    mpy_cross.run("-o", str(output.with_suffix('.mpy')), f"-O{args.opt}",  str(output))
 
 
 if __name__ == "__main__":
