@@ -17,6 +17,9 @@ parser.add_argument("--opt",
                     help="Set optimistic mode. As same as mpy-cross -O[N]. Default is 3.",
                     default="3",
                     choices=[0, 1, 2, 3])
+parser.add_argument("--encoding",
+                    help="Set encoding when write and read. Default is UTF-8.",
+                    default="UTF-8")
 
 args = parser.parse_args()
 
@@ -25,7 +28,7 @@ relative_import_pattern = re.compile(r'(?<=from\s)\.\S+(?=\simport\s)|(?<=import
 def resolve_dependence(source_file: Path) -> dict[str, dict|None]:
     dependence_tree = {}
 
-    with open(source_file, "r") as file:
+    with open(source_file, "r", encoding=args.encoding) as file:
         for line in file.readlines():
             line = line.strip()
             if line.startswith('"""') or line.startswith('#'): continue
@@ -53,13 +56,13 @@ def get_file_insert_order(dependence_tree: dict[str, dict|None]) -> list[str]:
 
 def merge_files(file_path:list[str], output_path:str) -> None:
     visited_files = {}
-    with open(output_path, "w") as output_file:
+    with open(output_path, "w", encoding=args.encoding) as output_file:
         for path in file_path:
 
             if path in visited_files: continue
             visited_files[path] = None
 
-            with open(path, "r") as file:
+            with open(path, "r", encoding=args.encoding) as file:
                 output_file.write(f"# ==== {path} ====\r")
 
                 for line in file.readlines():
