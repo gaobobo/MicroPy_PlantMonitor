@@ -80,7 +80,7 @@ def main():
     merge_files_order = get_file_insert_order(dependence_tree) + [str(source)]
     merge_files(merge_files_order, str(output))
 
-    mpy_cross.run("-s", str(output), "-o", str(output.with_suffix('.mpy')))
+    mpy_cross.run("-o", str(output.with_suffix('.mpy')), str(output))
 
 
 if __name__ == "__main__":
