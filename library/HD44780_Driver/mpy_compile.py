@@ -35,10 +35,16 @@ def resolve_dependence(source_file: Path) -> dict[str, dict|None]:
     return dependence_tree
 
 
-def get_file_insert_order(dependence_tree: dict[str, dict|None]) -> list[str]|None:
+def get_file_insert_order(dependence_tree: dict[str, dict|None]) -> list[str]:
+    result = []
     for key, value in dependence_tree.items():
-        if value is None: return [key]
-        else: return get_file_insert_order(value) + [key]
+        if value is None:
+            result.append(key)
+        else:
+            result.extend(get_file_insert_order(value))
+            result.append(key)
+    return result
+
         
 
 def merge_files(file_path:list[str], output_path:str) -> None:
