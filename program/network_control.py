@@ -40,7 +40,7 @@ async def async_connect(wlan:WLAN, ssid:str, password:str, refresh_cycle_sec:flo
     if wlan.status() == STAT_GOT_IP:
         return
     else:
-        raise Exception("Connect failed")
+        raise RuntimeError("Connect failed")
 
 
 def get_level(wlan:WLAN) -> int|None :
