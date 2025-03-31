@@ -1,10 +1,8 @@
-import asyncio
-
 from lib.HD44780_Driver.pcf8574_I2C_HAL import pcf8574_I2C_HAL
 from lib.HD44780_Driver.lcd_1602_api import lcd_api
 from machine import I2C, Pin
-from asyncio import sleep
 from framebuf import FrameBuffer, MONO_HLSB
+from asyncio import sleep, CancelledError
 
 WIFI_ICON = bytes([
     0b00000000,
@@ -141,7 +139,7 @@ async def async_animation_loading():
             api.cursor_move_left()
             api.cursor_move_left()
             api.cursor_move_left()
-    except asyncio.CancelledError:
+    except CancelledError:
         api.clear()
 
 
@@ -154,7 +152,7 @@ async def async_animation_wifi_connecting():
             await sleep(0.5)
             api.write_custom_char(FrameBuffer(bytearray(WIFI_CONNECTED_HIGH_ICON), 5, 8, MONO_HLSB), 0)
             await sleep(0.5)
-    except asyncio.CancelledError:
+    except CancelledError:
         api.write_custom_char(FrameBuffer(bytearray(WIFI_ICON), 5, 8, MONO_HLSB), 0)
 
 
@@ -170,7 +168,7 @@ async def async_animation_updating():
 
                 api.write_custom_char(FrameBuffer(b, 5, 8, MONO_HLSB), 1)
                 await sleep(0.5)
-    except asyncio.CancelledError:
+    except CancelledError:
         api.write_custom_char(FrameBuffer(bytearray([0, 0, 0, 0, 0, 0, 0, 0]), 5, 8, MONO_HLSB), 1)
 
 
