@@ -116,8 +116,8 @@ class lcd_control:
         0b00000000
     ])
     
-    board = None
-    api = None
+    board:pcf8574_I2C_HAL = None
+    api:lcd_api = None
     
     def __init__(self, i2c:I2C, address:int=0x27):
         self.board = pcf8574_I2C_HAL(i2c, address)
