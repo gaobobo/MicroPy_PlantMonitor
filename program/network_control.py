@@ -1,13 +1,5 @@
-from network import (WLAN,
-                     STAT_CONNECTING,
-                     STAT_WRONG_PASSWORD,
-                     STAT_NO_AP_FOUND,
-                     STAT_GOT_IP)
+from network import WLAN, STAT_CONNECTING, STAT_GOT_IP
 from asyncio import sleep
-
-class NetworkError(Exception): pass
-class NetworkWrongPasswordError(NetworkError): pass
-class NetworkNoAPFoundError(NetworkError): pass
 
 
 def disconnect(wlan:WLAN) -> None:
@@ -47,12 +39,8 @@ async def async_connect(wlan:WLAN, ssid:str, password:str, refresh_cycle_sec:flo
 
     if wlan.status() == STAT_GOT_IP:
         return
-    elif wlan.status() == STAT_WRONG_PASSWORD:
-        raise NetworkWrongPasswordError()
-    elif wlan.status() == STAT_NO_AP_FOUND:
-        raise NetworkNoAPFoundError()
     else:
-        raise NetworkError()
+        raise Exception("Connect failed")
 
 
 def get_level(wlan:WLAN) -> int|None :
