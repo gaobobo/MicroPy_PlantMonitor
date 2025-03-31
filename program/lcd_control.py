@@ -234,3 +234,18 @@ def update_soil_moisture(moisture: float):
         api.print("100 ")   # add space to clear value when digits not enough
     else:
         api.print(f"{(moisture * 100):.1f}    "[0:4])   # add space to clear value when digits not enough
+
+
+def update_wifi_level(level: bool|None):
+    """
+    :param level: bool|None
+        True: HIGH
+        False: LOW
+        None: DISCONNECT
+    """
+    if level is None:
+        api.write_custom_char(FrameBuffer(bytearray(WIFI_DISCONNECT_ICON), 5, 8, MONO_HLSB), 0)
+    elif level:
+        api.write_custom_char(FrameBuffer(bytearray(WIFI_CONNECTED_HIGH_ICON), 5, 8, MONO_HLSB), 0)
+    else:
+        api.write_custom_char(FrameBuffer(bytearray(WIFI_CONNECTED_LOW_ICON), 5, 8, MONO_HLSB), 0)
