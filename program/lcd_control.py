@@ -170,33 +170,26 @@ async def async_animation_loading(api:lcd_api):
 
 
 async def async_animation_wifi_connecting(api:lcd_api):
-    try:
-        while True:
-            api.write_custom_char(FrameBuffer(bytearray(WIFI_ICON), 5, 8, MONO_HLSB), 0)
-            await sleep(0.5)
-            api.write_custom_char(FrameBuffer(bytearray(WIFI_CONNECTED_LOW_ICON), 5, 8, MONO_HLSB), 0)
-            await sleep(0.5)
-            api.write_custom_char(FrameBuffer(bytearray(WIFI_CONNECTED_HIGH_ICON), 5, 8, MONO_HLSB), 0)
-            await sleep(0.5)
-    except CancelledError:
+    while True:
         api.write_custom_char(FrameBuffer(bytearray(WIFI_ICON), 5, 8, MONO_HLSB), 0)
+        await sleep(0.5)
+        api.write_custom_char(FrameBuffer(bytearray(WIFI_CONNECTED_LOW_ICON), 5, 8, MONO_HLSB), 0)
+        await sleep(0.5)
+        api.write_custom_char(FrameBuffer(bytearray(WIFI_CONNECTED_HIGH_ICON), 5, 8, MONO_HLSB), 0)
+        await sleep(0.5)
 
 
 async def async_animation_updating(api:lcd_api):
-    try:
-        api.write_custom_char(FrameBuffer(bytearray(UPLOADING_ICON), 5, 8, MONO_HLSB), 1)
-        while True:
-            for start in range(1, 8):
-                b = bytearray(UPLOADING_ICON[0:2])
+    api.write_custom_char(FrameBuffer(bytearray(UPLOADING_ICON), 5, 8, MONO_HLSB), 1)
+    while True:
+        for start in range(1, 8):
+            b = bytearray(UPLOADING_ICON[0:2])
 
-                for i in range(1, 8):
-                    b.append(UPLOADING_ICON[j] if (j:=(start + i - 1)) < 8 else 0)
+            for i in range(1, 8):
+                b.append(UPLOADING_ICON[j] if (j:=(start + i - 1)) < 8 else 0)
 
-                api.write_custom_char(FrameBuffer(b, 5, 8, MONO_HLSB), 1)
-                await sleep(0.5)
-    except CancelledError:
-        api.write_custom_char(FrameBuffer(bytearray([0, 0, 0, 0, 0, 0, 0, 0]), 5, 8, MONO_HLSB), 1)
-
+            api.write_custom_char(FrameBuffer(b, 5, 8, MONO_HLSB), 1)
+            await sleep(0.5)
 
     
 def update_temp(api:lcd_api, temp: float):
