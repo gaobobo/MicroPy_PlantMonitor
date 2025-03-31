@@ -1,6 +1,4 @@
-from lib.HD44780_Driver.pcf8574_I2C_HAL import pcf8574_I2C_HAL
 from lib.HD44780_Driver.lcd_1602_api import lcd_api
-from machine import I2C
 from framebuf import FrameBuffer, MONO_HLSB
 from asyncio import sleep, CancelledError
 

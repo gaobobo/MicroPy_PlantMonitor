@@ -1,5 +1,4 @@
 from network import (WLAN,
-                     STA_IF,
                      STAT_CONNECTING,
                      STAT_WRONG_PASSWORD,
                      STAT_NO_AP_FOUND,
