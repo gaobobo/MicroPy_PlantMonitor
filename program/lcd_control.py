@@ -122,7 +122,9 @@ class lcd_control:
     def __init__(self, i2c:I2C, address:int=0x27):
         self.board = pcf8574_I2C_HAL(i2c, address)
         self.api = lcd_api(self.board)
-        
+
+
+    def init_ui(self):
         self.api.write_custom_char(FrameBuffer(bytearray(self.WIFI_ICON), 5, 8, MONO_HLSB), 0)
         self.api.write_custom_char(FrameBuffer(bytearray([0, 0, 0, 0, 0, 0, 0, 0]), 5, 8, MONO_HLSB), 1)
         self.api.write_custom_char(FrameBuffer(bytearray(self.TEMPERATURE_ICON), 5, 8, MONO_HLSB), 2)
@@ -130,7 +132,6 @@ class lcd_control:
         self.api.write_custom_char(FrameBuffer(bytearray(self.PRESSURE_ICON), 5, 8, MONO_HLSB), 4)
         self.api.write_custom_char(FrameBuffer(bytearray(self.PA_ICON), 5, 8, MONO_HLSB), 5)
         self.api.write_custom_char(FrameBuffer(bytearray(self.MOISTURE_ICON), 5, 8, MONO_HLSB), 6)
-
         # | ============================================================================== |
         # | 1   | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  | 10 | 11 | 12 | 13 | 14 | 15 | 16 |
         # | ============================================================================== |
@@ -148,7 +149,6 @@ class lcd_control:
         self.api.print(" ")
         self.api.print_custom_char(1)
         self.api.print_custom_char(0)
-
         self.api.cursor_move_to(1, 0)
         self.api.print_custom_char(6)
         self.api.print("    %")
