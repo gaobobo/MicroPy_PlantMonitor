@@ -7,21 +7,21 @@ A planet monitor work with micropython and MQTT Home Assistant Integration.
 - Basic environment detection, including temperature, pressure.
 - Detect soil moisture and upload to Home Assistant platform automatically.
 - Data display with 1602 LCD
-- Wide device and MCP support and had been tested on ESP8266.
+- Wide device and MCP support and had been tested on TYPBoard V202 which ESP8266 inner.
 - Support WI-FI and upload status display
 
 https://github.com/user-attachments/assets/1d13734b-7d9a-4f98-9366-287bea55bc63
 
 ## How to use
 
-The `/program/` is a usage example, for the assembly guide to see *Assembly Guide* chapter below. 
+The `/program/` is all need to copy to your board, for the assembly guide to see *Assembly Guide* chapter below. 
 
 The `/library/` is drivers' source code. Here are general introduction. 
 
 ### HD44780 Driver
 
 HD44780 is a matrix LCD controller. It has 8 pins and 4 pins communication methods, which differences that 4 pins need 
-to transmit twice for single instruction and 8 pins need only once. To reduce pins needed, the display maybe use I²C 
+to transmit twice for single instruction and 8 pins need only once. To reduce pins needed, the display may use I²C 
 convert board or called *Backpack*, and it maybe attached back. I²C is a BUS protocol that only use SCL and SDL pins. 
 The I²C convert board will analyze the signal from SCL and SDL pins and set display pins level. HD44780 Driver's 
 README.md introduce more, see [HD44780_Driver's Readme](/library/HD44780_Driver/README.md).
@@ -36,7 +36,7 @@ data to fix temperature and pressure raw data. For how to read accurate data, re
 
 Here is a possible circuit diagram, with TPYBoard V202.
 
-![Circuit Diagram for Plant Monitor with ESP8266](/.doc/readme/SCH_main_2025-04-01.svg)
+![Circuit Diagram for Plant Monitor with ESP8266](./.doc/readme/SCH_main_2025-04-01.svg)
 
 Here is pins' defined. Note that all pins in MicroPython are ESP8266's pins, please see your own board's user guide 
 to learn which pins actually connect to ESP8266.
@@ -85,7 +85,7 @@ Windows called PowerShell, run `pip install esptool` to install flash tool.
 
 > **Note:** This tool is for ESP series. For other boards or MPU please reference MicroPython download website.
 
-> If show any info like `Command Not Found`, you need add CPython to your system's environment variable first.
+- If show any info like `Command Not Found`, you need add CPython to your system's environment variable first.
 
 - Then, disconnect board's power and press FLASH button. While pressing button, connect board to PC and run 
 `esptool --port <YOUR_COM> erase_flash`. `<YOUR_COM>` is your actual COM, like `/dev/ttyUSB0` on Linux/macOS or `COM4`
@@ -167,8 +167,8 @@ MQTT_BROKER_PORT = <MQTT_BROKER_PORT>
 ```
 
 - For MQTT Broker, recommend to use the mosquitto. For the Docker, use 
-`docker run --name mosquitto --network host -d eclipse-mosquitto:latest`. This will expose all port and access all 
-device that in network. Add `--restart=unless-stopped` to auto restart. 
+`docker run --name mosquitto --network host -d eclipse-mosquitto:latest` to install. This will expose all port and 
+access all device that in network. Add `--restart=unless-stopped` to auto restart. 
 
 > **Note:** If you use the Docker Desktop, you need go to *Settings - Resources - Network* to enable *host networking*.
 
@@ -198,5 +198,5 @@ finish setup.
 
 - Go to the Home Assistant's `Settings - Devices & services - ADD INTERGRATION` and select MQTT. If your mosquitto at
 the same device and didn't change port, that host is `127.0.0.1` and port is `1883`.
-- When the display show upload ![Upload Icon](/.doc/readme/upload_icon.png) icon, you should see data at 
+- When the display show upload ![Upload Icon](./.doc/readme/upload_icon.png) icon, you should see data at 
 Home Assistant's Overview.
