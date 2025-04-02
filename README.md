@@ -121,7 +121,7 @@ When you `import`, MicroPython will find `.mpy` first and if not found then find
 `.mpy` could exist together and MicroPython know which one should be called.
 
 > **Note:** `boot.py` and `main.py` is one part of boot process. MicroPython only call `boot.py` and `main.py`, not 
-> `.mpy`s
+> `.mpy`s.
 
 To compiled `.mpy` file before, recommend to read [MicroPython .mpy files](https://docs.micropython.org/en/latest/reference/mpyfiles.html).
 
