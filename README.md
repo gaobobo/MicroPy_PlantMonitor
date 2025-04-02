@@ -200,3 +200,9 @@ finish setup.
 the same device and didn't change port, that host is `127.0.0.1` and port is `1883`.
 - When the display show upload ![Upload Icon](./.doc/readme/upload_icon.png) icon, you should see data at 
 Home Assistant's Overview.
+
+---------
+
+## Special Thanks
+
+- Thank [@Diviner2004](https://github.com/Diviner2004) to review Japanese HD44780 character set.
