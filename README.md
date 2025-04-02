@@ -91,7 +91,7 @@ Windows called PowerShell, run `pip install esptool` to install flash tool.
 `esptool --port <YOUR_COM> erase_flash`. `<YOUR_COM>` is your actual COM, like `/dev/ttyUSB0` on Linux/macOS or `COM4`
 for Windows. For ensure, run `ls /dev/` on Linux/macOS or open *Device Manager* on Windows.
 - After erasing firmware, disconnect and reconnect while pressing FLASH button, then run 
-`esptool.py --port <YOUR_COM> --baud 460800 write_flash --flash_size=detect 0 <YOUR_DOWNLOADED_FIRMWARE>`. 
+`esptool --port <YOUR_COM> --baud 460800 write_flash --flash_size=detect 0 <YOUR_DOWNLOADED_FIRMWARE>`. 
 `<YOUR_DOWNLOADED_FIRMWARE>` is path that ESP8266 firmware.
 - All done!
 
@@ -121,7 +121,7 @@ When you `import`, MicroPython will find `.mpy` first and if not found then find
 `.mpy` could exist together and MicroPython know which one should be called.
 
 > **Note:** `boot.py` and `main.py` is one part of boot process. MicroPython only call `boot.py` and `main.py`, not 
-> `.mpy`s
+> `.mpy`s.
 
 To compiled `.mpy` file before, recommend to read [MicroPython .mpy files](https://docs.micropython.org/en/latest/reference/mpyfiles.html).
 
