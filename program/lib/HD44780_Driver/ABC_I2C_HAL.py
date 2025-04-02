@@ -71,7 +71,7 @@ class I2C_HAL(General_HAL):
         :param delay_cycles: Delay cycles
         :param BG_level: Background control. 0 is close, otherwise is on
         """
-        pass
+        raise RuntimeError("Need to override.")
 
     def write(self, RS_level: int, DBs_level: int, delay_cycles:int = 10 ):
         """
@@ -98,7 +98,7 @@ class I2C_HAL(General_HAL):
         :param RS_level: RS pin level. 0 is LOW, otherwise is HIGH
         :return: A 4bit int number read. From high bit DB7 to low bit DB4.
         """
-        pass
+        raise RuntimeError("Need to override.")
 
 
     def read(self, RS_level:int, delay_cycles:int = 10) -> int:
