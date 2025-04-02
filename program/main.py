@@ -124,7 +124,7 @@ async def async_upload_data(temperature: float, pressure: int, moisture: float):
         mqtt.publish("micropy/sensor".encode(),
                      f'{{"temperature":{temperature},"pressure":{pressure},"soil_moisture":{moisture}}}'.encode())
 
-        await sleep(3)  # wait to avoid update too frequency
+        await sleep(3)  # wait to avoid update too frequency to block the homeassistant IO
 
     finally:
         uploading_animate_task.cancel()
