@@ -6,7 +6,7 @@ import lcd_control as lcd
 from asyncio import sleep, run, create_task
 from lib.HD44780_Driver.lcd_1602_api import lcd_api
 from lib.HD44780_Driver.pcf8574_I2C_HAL import pcf8574_I2C_HAL
-from umqtt.simple import MQTTClient, MQTTException
+from umqtt.simple import MQTTClient
 from binascii import hexlify
 
 PASSWORD = "PASSWORD"
@@ -133,11 +133,13 @@ async def async_upload_data(temperature: float, pressure: int, moisture: float):
 
 
 async def main():
+
+    async def dummy_task() : await sleep(0)
+
     lcd.init_ui(api)
 
-    # Create a dummy task to avoid error
     network_connect_task = create_task(async_try_to_connect())
-    upload_data_task = create_task(async_try_to_connect())
+    upload_data_task = create_task(dummy_task())  # Create a dummy task to avoid error
 
     while True:
         temperature, pressure = get_temp_and_pressure()
