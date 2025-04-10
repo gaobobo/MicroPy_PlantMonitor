@@ -22,7 +22,7 @@ def get_temp_and_pressure() -> (float, int):
     bmp180 = BMP180Driver(I2C(scl=Pin(14), sda=Pin(2), freq=100000), 0x77)
 
     temperature = bmp180.get_temperature()
-    pressure = bmp180.get_pressure(oversampling_mode=0)
+    pressure = bmp180.get_pressure(oversampling_mode=bmp180.OVERSAMPLING_1_TIME)
 
     return temperature, pressure
 

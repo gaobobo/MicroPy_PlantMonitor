@@ -2,7 +2,11 @@ from time import sleep_ms
 from machine import I2C
 from struct import unpack
 
+
 class BMP180Driver:
+    """
+    The BMP180 Sensor Driver
+    """
 
     OVERSAMPLING_1_TIME = 0
     OVERSAMPLING_2_TIMES = 1
@@ -24,18 +28,21 @@ class BMP180Driver:
     _MC:int = 0
     _MD:int = 0
 
-    def __init__(self, i2c, address):
+    def __init__(self, i2c:I2C, address:int) -> None:
         """
-
-        :param i2c:
-        :param address:
+        **Constructor of Driver**
+        :param i2c: an I2C object from machine.I2C
+        :param address: BMP180 sensor's address
         """
         self.i2c = i2c
         self.address = address
         self._get_cal_param()
 
 
-    def _get_cal_param(self):
+    def _get_cal_param(self) -> None:
+        """
+        Get calibration data from BMP180 sensor's register.
+        """
         raw_data = self.i2c.readfrom_mem(self.address, 0xAA,22) # All reg is neighbour
 
         # cannot use int.from_bytes(), because micropy doesn't achieve signed argument. Instead of
@@ -54,13 +61,20 @@ class BMP180Driver:
 
 
     def _read_uncompensated_temp(self) -> int:
+        """
+        Read raw temperature data that uncalibrated.
+        :return: temperature raw data that uncalibrated and calculated.
+        """
         self.i2c.writeto_mem(self.address, 0xF4, (0x2E).to_bytes(1))
         sleep_ms(5) # wait 4.5ms to process
 
         return unpack(">h", self.i2c.readfrom_mem(self.address, 0xF6, 2))[0]
 
-    def _read_uncompensated_pressure(self, over_sample_setting_flag: int):
-
+    def _read_uncompensated_pressure(self, over_sample_setting_flag: int) -> int:
+        """
+        Read raw pressure data that uncalibrated.
+        :return: pressure raw data that uncalibrated and calculated.
+        """
         self.i2c.writeto_mem(self.address,
                              0xF4,
                              (0x34 | (over_sample_setting_flag << 6) ).to_bytes(1))
@@ -80,7 +94,13 @@ class BMP180Driver:
         return unpack(">h", byte_data)[0] >> (8 - over_sample_setting_flag)
 
 
-    def get_temperature(self):
+    def get_temperature(self) -> float:
+        """
+        Get current temperature.
+
+        Data had been calibrated and calculated.
+        :return: a temperature in Celsius.
+        """
         UT = self._read_uncompensated_temp()
 
         X1 = ((UT - self._AC6) * self._AC5) >> 15
@@ -91,7 +111,15 @@ class BMP180Driver:
         return T / 10
 
 
-    def get_pressure(self, oversampling_mode: int):
+    def get_pressure(self, oversampling_mode: int) -> int:
+        """
+        Get current pressure.
+
+        :param oversampling_mode:  over-sampling mode. Need one of BMP180Driver.OVERSAMPLING_1_TIME,
+        BMP180Driver.OVERSAMPLING_2_TIME, BMP180Driver.OVERSAMPLING_4_TIME,
+        BMP180Driver.OVERSAMPLING_8_TIME.
+        :return: a pressure in Pascal.
+        """
         UT = self._read_uncompensated_temp()
         UP = self._read_uncompensated_pressure(oversampling_mode)
 
