@@ -1,6 +1,6 @@
 # MicroPy_PlantMonitor
 
-A planet monitor work with micropython and MQTT Home Assistant Integration.
+A plant monitor work with micropython and MQTT Home Assistant Integration.
 
 ## Features
 
