@@ -109,7 +109,7 @@ All command see at [MicroPython remote control: mpremote](https://docs.micropyth
 |:-------------------------------------------------------------|:------------------------------------------------------------------------|
 | `mpremote connect auto fs ls ":"`                            | Show all files in board's root                                          |
 | `mpremote connect auto fs rm ":<PATH>"`                      | Remove file `<PATH>`.                                                   |
-| `mpremote connect auto fs cp -r "<PATH>\." ":"`              | Copy all files to board in `<PATH>`.                                    |
+| `mpremote connect auto fs cp -r "<PATH>\." ":"`              | Copy all files to board's `<PATH>`.                                     |
 | `mpremote connect auto fs cat ":<PATH>"`                     | Print file `<PATH>` content.                                            |
 | `mpremote connect auto fs cp ":<BOARD_PATH>" "<LOCAL_PATH>"` | Download file `<BOARD_PATH>` from the board to local `<LOCAL_PATH>`.    |
 | `mpremote connect auto repl`                                 | Enter board's REPL. This allow you to see `print()` or run python code. |
@@ -126,7 +126,7 @@ When you `import`, MicroPython will find `.mpy` first and if not found then find
 
 > [!IMPORTANT]
 > `boot.py` and `main.py` is one part of boot process. MicroPython only call `boot.py` and `main.py`, not 
-> `.mpy`s.
+> `.mpy`.
 
 To compiled `.mpy` file before, recommend to read [MicroPython .mpy files](https://docs.micropython.org/en/latest/reference/mpyfiles.html).
 
