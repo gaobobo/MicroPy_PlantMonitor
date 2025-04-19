@@ -7,7 +7,7 @@ A plant monitor work with micropython and MQTT Home Assistant Integration.
 - Basic environment detection, including temperature, pressure.
 - Detect soil moisture and upload to Home Assistant platform automatically.
 - Data display with 1602 LCD
-- Wide device and MCP support and had been tested on TYPBoard V202 which ESP8266 inner.
+- Wide device and MPU support and had been tested on TYPBoard V202 which ESP8266 inner.
 - Support WI-FI and upload status display
 
 https://github.com/user-attachments/assets/1d13734b-7d9a-4f98-9366-287bea55bc63
