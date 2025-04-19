@@ -123,7 +123,7 @@ space. Compiled `.py`s to `.mpy` will reduce code size and improve performance w
 When you `import`, MicroPython will find `.mpy` first and if not found then find `.py`. In other words, `.py` and 
 `.mpy` could exist together and MicroPython know which one should be called.
 
-> [!NOTE]
+> [!IMPORTANT]
 > `boot.py` and `main.py` is one part of boot process. MicroPython only call `boot.py` and `main.py`, not 
 > `.mpy`s.
 
