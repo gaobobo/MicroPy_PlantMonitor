@@ -41,11 +41,11 @@ Here is a possible circuit diagram, with TPYBoard V202.
 Here is pins' defined. Note that all pins in MicroPython are ESP8266's pins, please see your own board's user guide 
 to learn which pins actually connect to ESP8266.
 
-| Pin on ESP8266 | Pin Name on TPYBoard V202 | Note                                                                                           |
-|:--------------:|:-------------------------:|:-----------------------------------------------------------------------------------------------|
-|     GPIO14     |            SCL            | ESP8266 doesn't have I²C interface and need software to simulate or called *Software I²C Bus*. |
-|     GPIO2      |            SDL            | ESP8266 doesn't have I²C interface and need software to simulate or called *Software I²C Bus*. |
-|      ADC       |            ADC            | ESP8266 has one ADC or Analog to Digital Convertor. In MicroPython, it's called `ADC(0)` .     |
+| Pins on ESP8266 | Pin Name on TPYBoard V202 | Note                                                                                           |
+|:---------------:|:-------------------------:|:-----------------------------------------------------------------------------------------------|
+|     GPIO14      |            SCL            | ESP8266 doesn't have I²C interface and need software to simulate or called *Software I²C Bus*. |
+|      GPIO2      |            SDL            | ESP8266 doesn't have I²C interface and need software to simulate or called *Software I²C Bus*. |
+|       ADC       |            ADC            | ESP8266 has one ADC or Analog to Digital Convertor. In MicroPython, it's called `ADC(0)` .     |
 
 ### BOM(Bill of Materials)
 
