@@ -174,7 +174,7 @@ MQTT_BROKER_PORT = <MQTT_BROKER_PORT>
 `docker run --name mosquitto --network host -d eclipse-mosquitto:latest` to install. This will expose all port and 
 access all device that in network. Add `--restart=unless-stopped` to auto restart. 
 
-> [!NOTE]
+> [!IMPORTANT]
 > If you use the Docker Desktop, you need go to *Settings - Resources - Network* to enable *host networking*.
 
 - By default, the mosquitto only listen localhost and port is 1883. To listen all host, edit config by running 
