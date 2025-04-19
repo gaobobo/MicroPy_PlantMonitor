@@ -180,10 +180,10 @@ access all device that in network. Add `--restart=unless-stopped` to auto restar
 
 - By default, the mosquitto only listen localhost and port is 1883. To listen all host, edit config by running 
 `docker exec -it --workdir "/mosquitto/" mosquitto vi "./config/mosquitto.conf"`.
-- Add `listener 1883 0.0.0.0` at line 234, this will accept all request from any host to 1883 port. For 
-more information see `/mosquitto/config/mosquitto.conf`'s instructions.
-- Add `allow_anonymous true` at line 533, this will disable auth. For more information see 
-`/mosquitto/config/mosquitto.conf`'s instructions.
+  - Add `listener 1883 0.0.0.0` at line 234, this will accept all request from any host to 1883 port. For 
+  more information see `/mosquitto/config/mosquitto.conf`'s instructions.
+  - Add `allow_anonymous true` at line 533, this will disable auth. For more information see 
+  `/mosquitto/config/mosquitto.conf`'s instructions.
 
 > [!TIP]
 > Docker Desktop should have a GUI editor. Go to *Containers - mosquitto(or your custom name) - Files - Open 
