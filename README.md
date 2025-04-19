@@ -185,7 +185,7 @@ more information see `/mosquitto/config/mosquitto.conf`'s instructions.
 `/mosquitto/config/mosquitto.conf`'s instructions.
 
 > [!TIP]
-> Docker Desktop should have a GUI editor. Go to **Containers - mosquitto(or your custom name) - Files** to edit.
+> Docker Desktop should have a GUI editor. Go to *Containers - mosquitto(or your custom name) - Files* to edit.
 
 - Then restart by running `docker restart mosquitto`.
 
