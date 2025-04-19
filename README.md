@@ -171,7 +171,7 @@ MQTT_BROKER_IP = "<MQTT_BROKER_IP>"
 MQTT_BROKER_PORT = <MQTT_BROKER_PORT>
 ```
 
-- For MQTT Broker, recommend to use the mosquitto. For the Docker, use 
+- For MQTT Broker, recommend to use the mosquitto. To use Docker, run 
 `docker run --name mosquitto --network host -d eclipse-mosquitto:latest` to install. This will expose all port and 
 access all device that in network. Add `--restart=unless-stopped` to auto restart. 
 
