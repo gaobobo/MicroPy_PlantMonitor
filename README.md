@@ -77,13 +77,16 @@ converter to communicate with your board and may need to set level manually. Ple
 - Go to [MicroPython website](https://micropython.org/download/ESP8266_GENERIC/) to download firmware. ESP8266's 
 firmware is general. 
 
-> **Note:** TYPBoard V202 and TYPBoard V102 are NOT same! TPYBoard V102 is base on STM32 and firmware is same as 
+
+> [!NOTE]
+> TYPBoard V202 and TYPBoard V102 are NOT same! TPYBoard V102 is base on STM32 and firmware is same as 
 > pyboard v1.0 **(NOT pyboard v1.1)** . 
 
 - Install CPython at [Python Downloads](https://www.python.org/downloads/). After installing, open your terminal or 
 Windows called PowerShell, run `pip install esptool` to install flash tool.
 
-> **Note:** This tool is for ESP series. For other boards or MPU please reference MicroPython download website.
+> [!NOTE]
+> This tool is for ESP series. For other boards or MPU please reference MicroPython download website.
 
 - If show any info like `Command Not Found`, you need add CPython to your system's environment variable first.
 
@@ -120,7 +123,8 @@ space. Compiled `.py`s to `.mpy` will reduce code size and improve performance w
 When you `import`, MicroPython will find `.mpy` first and if not found then find `.py`. In other words, `.py` and 
 `.mpy` could exist together and MicroPython know which one should be called.
 
-> **Note:** `boot.py` and `main.py` is one part of boot process. MicroPython only call `boot.py` and `main.py`, not 
+> [!IMPORTANT]
+> `boot.py` and `main.py` is one part of boot process. MicroPython only call `boot.py` and `main.py`, not 
 > `.mpy`s.
 
 To compiled `.mpy` file before, recommend to read [MicroPython .mpy files](https://docs.micropython.org/en/latest/reference/mpyfiles.html).
@@ -170,17 +174,23 @@ MQTT_BROKER_PORT = <MQTT_BROKER_PORT>
 `docker run --name mosquitto --network host -d eclipse-mosquitto:latest` to install. This will expose all port and 
 access all device that in network. Add `--restart=unless-stopped` to auto restart. 
 
-> **Note:** If you use the Docker Desktop, you need go to *Settings - Resources - Network* to enable *host networking*.
+> [!IMPORTANT]
+> If you use the Docker Desktop, you need go to *Settings - Resources - Network* to enable *host networking*.
 
 - By default, the mosquitto only listen localhost and port is 1883. To listen all host, edit config by running 
 `docker exec -it --workdir "/mosquitto/" mosquitto vi "./config/mosquitto.conf"`.
 - Add `listener 1883 0.0.0.0` at line 234, this will accept all request from any host to 1883 port. For 
-more information see `/mosquitto/config/mosquitto.conf`'s instructions. Docker Desktop should have a GUI editor.
+more information see `/mosquitto/config/mosquitto.conf`'s instructions.
 - Add `allow_anonymous true` at line 533, this will disable auth. For more information see 
-`/mosquitto/config/mosquitto.conf`'s instructions. Docker Desktop should have a GUI editor.
+`/mosquitto/config/mosquitto.conf`'s instructions.
+
+> [!TIP]
+> Docker Desktop should have a GUI editor. Go to *Containers - mosquitto(or your custom name) - Files* to edit.
+
 - Then restart by running `docker restart mosquitto`.
 
-> **Important:** This guide is intended for use within a local area network (LAN) and assumes that the device is not 
+> [!CAUTION]
+> This guide is intended for use within a local area network (LAN) and assumes that the device is not 
 > exposed to the public internet. If you need additional security measures, please refer to the configuration 
 > file instructions, especially the section on ***"Certificate-based SSL/TLS support"*** (line 303 of 
 > `/mosquitto/config/mosquitto.conf`).
@@ -192,7 +202,8 @@ Or use docker to install *Home Assistant Container*:
 access all device that in network. Add `--restart=unless-stopped` to auto restart. Then access `localhost:8123` to 
 finish setup.  
 
-> **Important:** This guide is intended for use within a local area network (LAN) and assumes that the device is not 
+> [!CAUTION] 
+> This guide is intended for use within a local area network (LAN) and assumes that the device is not 
 > exposed to the public internet. If you need additional security measures, please refer to 
 > [Home Assistant - Securing](https://www.home-assistant.io/docs/configuration/securing/).
 
