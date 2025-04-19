@@ -62,10 +62,10 @@ to learn which pins actually connect to ESP8266.
 If you had a flashed MicroPython board, jump and see next chapter. But too old firmware may cause unknown problem, 
 recommending use latest firmware.
 
-For official ESP8266 flash guide, see 
+For official ESP8266 flashing guide, see 
 [Getting started with MicroPython on the ESP8266](https://docs.micropython.org/en/latest/esp8266/tutorial/intro.html).
 
-For other boards' flash guide, see [MicroPython downloads](https://micropython.org/download/).
+For other boards' flashing guide, see [MicroPython downloads](https://micropython.org/download/).
 
 As for my experience, MicroPython on ESP8266 may cannot start up sometimes. If board have any problems when connect 
 terminal or copy programs, re-flash firmware.
