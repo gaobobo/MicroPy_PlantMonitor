@@ -88,7 +88,8 @@ Windows called PowerShell, run `pip install esptool` to install flash tool.
 > [!NOTE]
 > This tool is for ESP series. For other boards or MPU please reference MicroPython download website.
 
-- If show any info like `Command Not Found`, you need add CPython to your system's environment variable first.
+> [!IMPORTANT]
+> If show any info like `Command Not Found`, you need add CPython to your system's environment variable first.
 
 - Then, disconnect board's power and press FLASH button. While pressing button, connect board to PC and run 
 `esptool --port <YOUR_COM> erase_flash`. `<YOUR_COM>` is your actual COM, like `/dev/ttyUSB0` on Linux/macOS or `COM4`
