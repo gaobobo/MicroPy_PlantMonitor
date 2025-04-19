@@ -56,6 +56,7 @@ to learn which pins actually connect to ESP8266.
 | BMP180 Digital Pressure Sensor Board |     GY-89     |   1    | Other boards with BMP180 and I2C interface exposed are also OK.                          | [GY-89 Datasheet(CN Only)](https://pan.baidu.com/s/1uGhAvttzMSDVew6XG9XA7Q?pwd=8889)</br>[BMP180 Datasheet](https://cdn-shop.adafruit.com/datasheets/BST-BMP180-DS000-09.pdf) |
 | I2C Covert Board for LCD             |               |   1    | Maybe attached back of the 1602 LCD display, or also called backpack.                    | [I2C LCD转接板(CN Only)](https://pan.baidu.com/s/1Yr74R8GVXv5tu8h7VaSlUQ?pwd=8888)</br>[PCF8574 Datasheet](https://www.ti.com/lit/ds/symlink/pcf8574.pdf)                        |
 | Soil Moisture Sensor                 |  YL-69/YL-38  |   1    | Others that output the analog signal are also OK.                                        | [土壤湿度传感器(CN Only)](https://pan.baidu.com/s/1mhHIu2s)                                                                                                                          |
+| I2C Covert Board for LCD             |               |   1    | Maybe attached back of the 1602 LCD display, or also called *backpack*.                       | [I2C LCD转接板(CN Only)](https://pan.baidu.com/s/1Yr74R8GVXv5tu8h7VaSlUQ?pwd=8888)</br>[PCF8574 Datasheet](https://www.ti.com/lit/ds/symlink/pcf8574.pdf)                        |
 
 ### Flash your board
 
