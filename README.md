@@ -117,7 +117,7 @@ Generally, you only need copy files to your board in `/program/`.
 You know, codes contain many unused lines, like comments. Although they won't run, they also take up valuable 
 space. Compiled `.py`s to `.mpy` will reduce code size and improve performance without any change: just like use `.py`.
 
-When you `import`, MicroPython will find `.mpy` first and if not found then find `.py`. In other words, `.py` and 
+When you `import`, MicroPython will find `.py` first and if not found then find `.mpy`. In other words, `.py` and 
 `.mpy` could exist together and MicroPython know which one should be called.
 
 > **Note:** `boot.py` and `main.py` is one part of boot process. MicroPython only call `boot.py` and `main.py`, not 
