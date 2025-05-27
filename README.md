@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+>
+> This project was part of my coursework. Since the course has ended, it will no longer be updated. 
+
+
 # MicroPy_PlantMonitor
 
 A plant monitor work with micropython and MQTT Home Assistant Integration.
